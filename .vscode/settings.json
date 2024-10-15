@@ -1,0 +1,52 @@
+{
+  "workbench.iconTheme": "material-icon-theme",
+  "workbench.colorTheme": "One Dark Pro",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.inlineSuggest.enabled": true,
+  "editor.fontFamily": "'fira code'",
+  "editor.fontLigatures": "true",
+  "editor.fontWeight": "normal",
+  "editor.fontSize": 12,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "always",
+    "source.fixAll": "always"
+  },
+  // @see https://github.com/paolotiu/tailwind-intellisense-regex-list?tab=readme-ov-file
+  "tailwindCSS.experimental.classRegex": [
+    // obj with prefix cls, Styles const sizesCls ={ sm: 'text-sm'}
+    [
+      "Styles|Cls\\s*(?::\\s*[^=]+)?\\s*=\\s*([^;]*);",
+      "['\"`]([^'\"`]*)['\"`]"
+    ],
+    // JavaScript string variable   const css = `bg-red-300 ${a}`; or const css = "bg-red-300"
+    [
+      "(?:\\b(?:const|let)\\s+)?[\\w$_]*(?:[Ss]tyles|[Cc]lasses|[Cc]lassnames|[Cc]ls|[Cc]lx|[Cc]lass|[Cc]ss)[\\w\\d]*\\s*(?:=|\\+=)\\s*['`\"]([^'\"]*)['`\"]"
+    ],
+    // fn
+    ["(?:tw|cn)\\(([^)]*)\\)", "(?:'|\"|`)([^\"'`]*)(?:'|\"|`)"],
+    // dom
+    ["classList.(?:add|remove)\\(([^)]*)\\)", "(?:'|\"|`)([^\"'`]*)(?:'|\"|`)"],
+    // data class
+    ["data-.*-class=['\"]([^'\"]*)"]
+  ],
+  "cSpell.words": ["nocheck", "umpay"],
+  "[shellscript]": {
+    "editor.defaultFormatter": "foxundermoon.shell-format"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+  },
+  "i18n-ally.enabledFrameworks": ["react"],
+  "i18n-ally.keystyle": "flat",
+  "i18n-ally.extract.autoDetect": true,
+  "i18n-ally.localesPaths": ["packages/i18n"],
+  "[markdown]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
+}
