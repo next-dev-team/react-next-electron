@@ -12,6 +12,7 @@ export default defineConfig({
   },
   mako: false,
   antd: {},
+  access: {},
   mfsu: {
     shared: {
       react: {
@@ -23,13 +24,17 @@ export default defineConfig({
   },
   tailwindcss: {},
   request: {},
+  locale: {
+    title: true,
+  },
   dva: {
     immer: {},
   },
   valtio: {},
+  initialState: {},
   mock: {},
   model: {},
-  chainWebpack(config, {}) {
+  chainWebpack(config, { }) {
     // when need to import outside src
     config.module.rule('ts-in-node_modules').include.clear();
     config.plugin('unplugin-auto-import').use(autoImportPlugin());

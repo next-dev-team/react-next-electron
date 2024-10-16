@@ -4,7 +4,9 @@ export default defineMock({
   'GET /api/counter': (_req, res) => {
     res.json({
       success: true,
-      data: {},
+      data: {
+        counter: 10
+      },
       errorCode: 0,
     });
   },
