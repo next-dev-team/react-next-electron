@@ -29,9 +29,7 @@
     "*.{ts,tsx}": "prettier --write",
     "*.{js,jsx}": "prettier --write"
   },
-  "resolutions": {
-    "immer": "9.0.12"
-  },
+  "resolutions": {},
   "dependencies": {
     "@ant-design/pro-components": "^2.7.19",
     "@umijs/max": "^4.3.27",

@@ -27,9 +27,9 @@ export default defineConfig({
   locale: {
     title: true,
   },
-  dva: {
-    immer: {},
-  },
+  // dva: {
+  //   immer: {},
+  // },
   valtio: {},
   initialState: {},
   mock: {},
