@@ -1,6 +1,6 @@
 {
   "name": "i18n-sync",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "private": true,
   "scripts": {
     "build": "max build",
@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "@ant-design/pro-components": "^2.7.19",
-    "@umijs/max": "^4.3.26",
+    "@umijs/max": "^4.3.27",
     "ahooks": "^3.8.1",
     "antd": "^5.21.4",
     "react": "^18.3.1"
