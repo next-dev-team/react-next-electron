@@ -9,9 +9,6 @@ export default defineConfig({
   electron: {
     routerMode: 'memory',
     externals: ['glob'],
-    builderOptions: {
-      "files": ["main.exe"],
-    }
   },
   mako: false,
   antd: {},
