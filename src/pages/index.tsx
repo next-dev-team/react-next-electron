@@ -124,6 +124,7 @@ export default function HomePage() {
       bordered
       headerBordered
       tabs={{
+        destroyInactiveTabPane: true,
         items: [
           {
             key: '1',

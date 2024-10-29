@@ -1,0 +1,9 @@
+fastapi==0.111.0
+uvicorn==0.29.0
+sympy==1.12
+pydantic
+git+https://github.com/awesome-service/tha.git
+git+https://github.com/awesome-service/khmerpunctuate.git
+khmercut
+khmernormalizer
+loguru

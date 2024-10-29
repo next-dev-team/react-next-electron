@@ -1,5 +1,6 @@
 import { createMainWindow } from '@/main-window';
 import { app, protocol } from 'electron';
+import { runPython } from './start';
 
 protocol.registerSchemesAsPrivileged([
   {
@@ -13,6 +14,16 @@ protocol.registerSchemesAsPrivileged([
   },
 ]);
 
-app.whenReady().then(() => {
-  createMainWindow();
-});
+const onReady = () => {
+  console.log('Python running');
+  runPython()
+    .then(() => {
+      createMainWindow();
+      console.log('python run successfully');
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
+
+app.whenReady().then(onReady).catch(console.log);

@@ -1,6 +1,7 @@
 import createProtocol from '@/create-protocol';
 import { app, BrowserWindow } from 'electron';
 import * as path from 'node:path';
+import { killPython, runPython } from './start';
 
 export type IContext = {
   /** is allowed quit app */
@@ -59,7 +60,9 @@ function createMainWindow() {
 app.on('before-quit', () => {
   context.allowQuitting = true;
 });
+
 app.on('window-all-closed', () => {
+  killPython();
   if (process.platform !== 'darwin') {
     app.quit();
   }

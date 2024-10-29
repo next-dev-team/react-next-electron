@@ -33,9 +33,23 @@ const CounterValitio = () => {
   );
 };
 
+const PythonTest = () => {
+  const { data, loading, mutate, refresh } = useRequest('/api/ping');
+  return (
+    <Space>
+      <Button danger onClick={() => mutate({})}>Reset</Button>
+      <Button loading={loading}>{JSON.stringify(data)}</Button>
+      <Button type="primary" onClick={() => refresh()}>Refresh</Button>
+    </Space>
+  );
+};
+
 const TestPage = () => {
   return (
     <Flex gap={10}>
+      <ProCard bordered headerBordered title={'Test Fast API'}>
+        <PythonTest />
+      </ProCard>
       <ProCard bordered headerBordered title={'Counter with useModel'}>
         <CounterModel />
       </ProCard>
