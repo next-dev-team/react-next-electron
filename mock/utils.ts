@@ -1,10 +1,7 @@
 export const createResponse = (res: any, data: any) => {
   res.json({
     success: true,
-    data: {
-      ...data,
-      date: new Date().getTime(),
-    }
+    data,
   });
 };
 

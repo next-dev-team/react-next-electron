@@ -1,7 +1,9 @@
 #!/bin/bash
 
 # install virtualenv
-python -m venv env
+if [ ! -d "env" ]; then
+    python -m venv env
+fi
 
 # activate virtual env
 source env/Scripts/activate

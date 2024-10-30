@@ -1,6 +1,6 @@
 import { createMainWindow } from '@/main-window';
-import { app, protocol } from 'electron';
-import { runPython } from './start';
+import { app, dialog, protocol } from 'electron';
+import { startApi } from './start';
 
 protocol.registerSchemesAsPrivileged([
   {
@@ -15,15 +15,15 @@ protocol.registerSchemesAsPrivileged([
 ]);
 
 const onReady = () => {
-  console.log('Python running');
-  runPython()
+  startApi()
     .then(() => {
       createMainWindow();
-      console.log('python run successfully');
+      console.log('App run successfully');
     })
     .catch((error) => {
-      console.log(error);
+      dialog.showErrorBox('Server Error', JSON.stringify(error),);
+      createMainWindow();
     });
-}
+};
 
 app.whenReady().then(onReady).catch(console.log);

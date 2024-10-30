@@ -22,5 +22,5 @@ async def ping(p="top 20 world place"):
 
 
 if __name__ == "__main__":
-    port = 9999
-    uvicorn.run("main:app", host="0.0.0.0", port=port, reload=True)
+    port = 8100
+    uvicorn.run("main:app", host="0.0.0.0", port=port, reload=False)

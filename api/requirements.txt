@@ -7,3 +7,5 @@ git+https://github.com/awesome-service/khmerpunctuate.git
 khmercut
 khmernormalizer
 loguru
+setuptools
+pyinstaller

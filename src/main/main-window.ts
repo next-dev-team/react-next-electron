@@ -1,7 +1,7 @@
 import createProtocol from '@/create-protocol';
 import { app, BrowserWindow } from 'electron';
 import * as path from 'node:path';
-import { killPython, runPython } from './start';
+import { killPython } from './start';
 
 export type IContext = {
   /** is allowed quit app */
@@ -63,8 +63,10 @@ app.on('before-quit', () => {
 
 app.on('window-all-closed', () => {
   killPython();
+  console.log('window-all-closed');
+
   if (process.platform !== 'darwin') {
-    app.quit();
+   setTimeout(() => app.quit(), 1000);
   }
 });
 
