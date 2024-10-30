@@ -30,11 +30,19 @@
     "*.{js,jsx}": "prettier --write"
   },
   "resolutions": {
-    "immer": "9.0.12"
+    "immer": "9.0.12",
+    "path-to-regexp": "8.0.0",
+    "app-builder-lib": "24.13.2",
+    "semver": "7.5.2",
+    "minimatch": "5.1.1",
+    "vite": "5.4.10",
+    "micromatch": "4.0.8",
+    "axios": "1.5.1"
+
   },
   "dependencies": {
     "@ant-design/pro-components": "^2.7.19",
-    "@umijs/max": "^4.3.27",
+    "@umijs/max": "^4.3.28",
     "ahooks": "^3.8.1",
     "antd": "^5.21.4",
     "react": "^18.3.1"
