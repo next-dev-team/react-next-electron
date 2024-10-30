@@ -34,3 +34,7 @@ const Page = () => {
   return <Button onClick={() => hello('ElectronJS')}>Hello </Button>;
 };
 ```
+
+## Reference and Credit
+
+<https://github.com/dieharders/ai-text-server>

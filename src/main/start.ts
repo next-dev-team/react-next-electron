@@ -10,12 +10,9 @@ let python: Record<string, any> = {};
 
 const appPath = path.resolve(__dirname, '..', '..', '../api');
 
-/**
- * Runs a Python script asynchronously and resolves upon successful execution.
- * Uses a child process to spawn the Python interpreter and run the script.
- *
- * @returns {Promise<void>} A promise that resolves when the Python script is successfully executed.
- */
+const apiPort = 8100;
+
+
 export function runPython() {
   return new Promise<void>((resolve, reject) => {
     const appFile = path.join(appPath, 'main.py');
@@ -28,20 +25,20 @@ export function runPython() {
       console.log(`stdout: ${data}`);
     });
 
-    python.stderr.on('data', (data) => {
-      console.error(`stderr: ${data}`);
-      if (data.includes('Application startup complete.')) {
-        resolve();
-      } else {
-        reject(new Error(`Python error: ${data}`));
-      }
+    waitOn({
+      resources: [`tcp:${apiPort}`],
+    }).then(() => {
+      console.log('API is ready');
+      resolve();
+    }).catch((err) => {
+      console.log('API is not ready', err);
+      reject(err);
     });
 
     console.log('appFile', appFile);
   });
 }
 
-const apiPort = 8100;
 
 export async function killPython(pid: any = apiPort) {
   // Usage with promises
@@ -71,7 +68,7 @@ export async function killPython(pid: any = apiPort) {
   });
 }
 
-export const startApi = () => {
+export const startApi = (usePy = false) => {
 
   console.log('API is starting...', apiPort);
 
@@ -79,6 +76,7 @@ export const startApi = () => {
     const appFile = path.join(appPath, 'dist', 'main.exe');
 
     isAvailablePromise({ port: apiPort }).then((apiReady) => {
+
       waitOn({
         resources: [`tcp:${apiPort}`],
       }).then(() => {
@@ -90,23 +88,43 @@ export const startApi = () => {
 
       if (apiReady) {
         console.log('API is ready');
-
         resolve();
-      } else {
-        console.log('API is not ready');
-        python = exec(appFile, (err, stdout, stderr) => {
-          if (err) {
-            console.error('Failed to start FastAPI server:', err);
-            reject(err);
-            return;
-          }
-          if (stderr) {
-            console.error(`stderr: ${stderr}`);
-          }
-          console.log(`stdout: ${stdout}`);
+        return
+      }
+
+      // for py file
+      if (usePy) {
+        console.log('Python is starting...', apiPort);
+
+        python = child_process.spawn('env\\scripts\\python.exe', ['main.py'], {
+          cwd: appPath,
+        });
+
+        python.stdout.on('data', (data) => {
+          console.log(`stdout: ${data}`);
+        });
+
+        python.stderr.on('data', (data) => {
+          console.error(`stderr: ${data}`);
           resolve();
         });
+        return
       }
+
+      // for exec file
+      python = exec(appFile, (err, stdout, stderr) => {
+        if (err) {
+          console.error('Failed to start FastAPI server:', err);
+          reject(err);
+          return;
+        }
+        if (stderr) {
+          console.error(`stderr: ${stderr}`);
+        }
+        console.log(`stdout: ${stdout}`);
+        resolve();
+      });
+
 
     });
 
