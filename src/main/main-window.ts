@@ -1,7 +1,10 @@
 import createProtocol from '@/create-protocol';
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, session } from 'electron';
 import * as path from 'node:path';
 import { killPython } from './start';
+const Pinokiod = require("pinokiod");
+const Store = require("electron-store");
+import packagejson from '../../package.json'
 
 export type IContext = {
   /** is allowed quit app */
@@ -26,7 +29,29 @@ const showMainWindow = () => {
   }
 };
 
-function createMainWindow() {
+async function createMainWindow() {
+  const store = new Store();
+  const pinokiod = new Pinokiod({
+    //  port: PORT,
+    agent: "electron",
+    version: packagejson.version,
+    store
+  })
+  await pinokiod.start({
+    browser: {
+      clearCache: async () => {
+        console.log("clear cache", session.defaultSession);
+        await session.defaultSession.clearStorageData();
+        console.log("cleared");
+      },
+    },
+  });
+  // PORT = pinokiod.port;
+  // theme = pinokiod.theme;
+  // colors = pinokiod.colors;
+  console.log("pinokiod", pinokiod);
+
+
   const mainWindow = new BrowserWindow({
     width: 1000,
     height: 600,
@@ -66,7 +91,7 @@ app.on('window-all-closed', () => {
   console.log('window-all-closed');
 
   if (process.platform !== 'darwin') {
-   setTimeout(() => app.quit(), 1000);
+    setTimeout(() => app.quit(), 1000);
   }
 });
 
