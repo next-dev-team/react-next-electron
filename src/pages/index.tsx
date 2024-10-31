@@ -1,9 +1,4 @@
-import {
-  ProCard,
-  ProForm,
-  ProFormCheckbox,
-  ProFormText,
-} from '@ant-design/pro-components';
+import { ProCard } from '@ant-design/pro-components';
 import { useLocalStorageState } from 'ahooks';
 import { Button, notification } from 'antd';
 
@@ -44,83 +39,26 @@ const handleSync = (opts = {} as any) => {
   });
 };
 
-const SyncForm = () => {
-  const [formState, setFormState] = useLocalStorageState('formState', {
-    defaultValue: {
-      i18nUrl: '',
-      isScanAll: true,
-      isForceOverwrite: true,
-    },
-  });
-
+const WeView = () => {
   return (
-    <ProForm
-      onFinish={async (values: any) => {
-        console.log('formState', values);
-
-        const nextValues = {
-          ...values,
-          isForceOverwrite: true,
-          isScanAll: true,
-        };
-
-        setFormState(nextValues);
-        handleSync(nextValues);
-      }}
-      initialValues={{
-        ...formState,
-      }}
-    >
-      <ProFormCheckbox
-        name="isForceOverwrite"
-        width={'md'}
-        label={translate('Force Overwrite')}
-        tooltip={translate('Overwrite file')}
+    <div className="">
+      <webview
+        src={'http://localhost/'}
+        style={{
+          width: '100%',
+          height: '69vh',
+          minHeight: '100%',
+          display: 'flex',
+        }}
       />
-
-      <ProFormCheckbox
-        name="isScanAll"
-        width={'md'}
-        label={translate('Scan All')}
-        tooltip={translate(
-          'Scan all will include dynamic params or server translate',
-        )}
-      />
-
-      <ProFormText
-        name="i18nUrl"
-        rules={[
-          {
-            type: 'url',
-            message: translate('Must be valid full API URL'),
-          },
-        ]}
-        label={translate('API URL')}
-      />
-      <ProFormText
-        rules={[
-          {
-            whitespace: true,
-            message: translate('Whitespace are not allowed'),
-          },
-          {
-            required: true,
-            message: translate(
-              'Must be a absolute path eg. D:\\projects\\test\\project\\src',
-            ),
-          },
-        ]}
-        name="scanPath"
-        label={translate('Full Path')}
-      />
-    </ProForm>
+    </div>
   );
 };
 
 export default function HomePage() {
   return (
     <ProCard
-      title={translate('I18n Management')}
+      title={translate('Configs')}
       bordered
       headerBordered
       tabs={{
@@ -128,13 +66,8 @@ export default function HomePage() {
         items: [
           {
             key: '1',
-            label: translate('I18N SYNC'),
-            children: <SyncForm />,
-          },
-          {
-            key: '2',
-            label: translate('I18N SYNC'),
-            children: <SyncForm />,
+            label: translate('SERVER'),
+            children: <WeView />,
           },
         ],
       }}

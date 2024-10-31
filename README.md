@@ -38,3 +38,5 @@ const Page = () => {
 ## Reference and Credit
 
 <https://github.com/dieharders/ai-text-server>
+<https://github.com/cba85/electron-webview>
+<https://github.com/hokein/electron-sample-apps>

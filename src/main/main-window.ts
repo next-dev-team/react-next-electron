@@ -58,6 +58,7 @@ async function createMainWindow() {
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       sandbox: false,
+      webviewTag: true,
     },
   });
   context.mainWindow = mainWindow;
