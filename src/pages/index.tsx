@@ -59,6 +59,11 @@ export default function HomePage() {
   return (
     <ProCard
       title={translate('Configs')}
+      extra={
+        <Button onClick={() => {
+          window.open("/", "_blank", "self")
+        }}>API</Button>
+      }
       bordered
       headerBordered
       tabs={{
