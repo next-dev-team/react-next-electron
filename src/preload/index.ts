@@ -1,5 +1,5 @@
 import { contextBridge, shell, ipcRenderer } from 'electron';
-import i18nSync from './i18n-sync';
+// import i18nSync from './i18n-sync';
 
 const apiKey = '$api';
 
@@ -85,7 +85,7 @@ window.electronAPI = {
 
 const api = {
   versions: process.versions,
-  i18nSync,
+  // i18nSync,
   showItemInFolder: shell.showItemInFolder,
   hello,
   // Communicate between renderer and main process

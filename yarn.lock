@@ -10484,6 +10484,13 @@ pinokiod@^2.15.1:
     yaml "^2.3.4"
     yargs-unparser-custom-flag "^2.0.0"
 
+pinokiojs@^0.0.9:
+  version "0.0.9"
+  resolved "https://registry.yarnpkg.com/pinokiojs/-/pinokiojs-0.0.9.tgz#953d7b96d6e0b041b31db86e10f71c4171db2bfc"
+  integrity sha512-CaHHq5KXr2fYyDnV7W0v+8YHcY21el5GpyU9ON0c+ulzEnextg76Co2q/gx48y/mZxopTgLGadCO/aXaR7STWg==
+  dependencies:
+    unws "^0.2.3"
+
 pirates@^4.0.1, pirates@^4.0.4:
   version "4.0.6"
   resolved "https://registry.yarnpkg.com/pirates/-/pirates-4.0.6.tgz#3018ae32ecfcff6c29ba2267cbf21166ac1f36b9"
@@ -14032,6 +14039,11 @@ untildify@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/untildify/-/untildify-4.0.0.tgz#2bc947b953652487e4600949fb091e3ae8cd919b"
   integrity sha512-KK8xQ1mkzZeg9inewmFVDNkg3l5LUhoq9kN6iWYB/CC9YMG8HA+c1Q8HwDe6dEX7kErrEVNVBO3fWsVq5iDgtw==
+
+unws@^0.2.3:
+  version "0.2.4"
+  resolved "https://registry.yarnpkg.com/unws/-/unws-0.2.4.tgz#cb6f27a98a7fab4bf1c2f842648f9a2fc8be80f2"
+  integrity sha512-/N1ajiqrSp0A/26/LBg7r10fOcPtGXCqJRJ61sijUFoGZMr6ESWGYn7i0cwr7fR7eEECY5HsitqtjGHDZLAu2w==
 
 update-browserslist-db@^1.1.0:
   version "1.1.1"

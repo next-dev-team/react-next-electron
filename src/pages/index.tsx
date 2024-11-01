@@ -1,43 +1,12 @@
 import { ProCard } from '@ant-design/pro-components';
-import { useLocalStorageState } from 'ahooks';
 import { Button, notification } from 'antd';
+import Pinokio from 'pinokiojs';
 
 const translate = (key: string) => {
   return key;
 };
 
-const { i18nSync, showItemInFolder } = window.$api || {};
-
-const handleSync = (opts = {} as any) => {
-  const { scanPath, ...restOpt } = opts || {};
-
-  i18nSync(scanPath, {
-    ...restOpt,
-    cb(value, error: any) {
-      if (error) {
-        notification.error({
-          message: translate('Error'),
-          description: error?.message || 'Unknown Error',
-        });
-        return;
-      }
-      notification.success({
-        message: translate('Success'),
-        description: value,
-        btn: (
-          <Button
-            type="primary"
-            onClick={() => {
-              showItemInFolder(value);
-            }}
-          >
-            {translate('Output Folder')}
-          </Button>
-        ),
-      });
-    },
-  });
-};
+const {  showItemInFolder } = window.$api || {};
 
 const WeView = () => {
   return (
@@ -56,13 +25,33 @@ const WeView = () => {
 };
 
 export default function HomePage() {
+  const pinokio = new Pinokio({
+    http: "http://localhost:80",
+    fs: "http://localhost:80/fs",
+    rpc: "ws://localhost:80",
+  })
+
+  const api = async () => {
+   const allPort =   pinokio.rpc
+  console.log('f', allPort);
+
+  }
+
+  useEffect(() => {
+    api();
+  }, []);
+
   return (
     <ProCard
       title={translate('Configs')}
       extra={
-        <Button onClick={() => {
-          window.open("/", "_blank", "self")
-        }}>API</Button>
+        <Button
+          onClick={() => {
+            window.open('http://localhost');
+          }}
+        >
+          Server Settings
+        </Button>
       }
       bordered
       headerBordered

@@ -30,6 +30,7 @@ let PORT;
 //let PORT = 42000
 //let PORT = (platform === 'linux' ? 42000 : 80)
 
+
 const filter = function (item) {
   return item.browserName === "Chrome";
 };
@@ -281,7 +282,7 @@ const attach = (event, webContents) => {
           webPreferences: {
             webSecurity: false,
             nativeWindowOpen: true,
-            contextIsolation: false,
+            contextIsolation: true,
             nodeIntegrationInSubFrames: true,
             preload: path.join(__dirname, "preload.js"),
           },
@@ -310,7 +311,7 @@ const attach = (event, webContents) => {
               webPreferences: {
                 webSecurity: false,
                 nativeWindowOpen: true,
-                contextIsolation: false,
+                contextIsolation: true,
                 nodeIntegrationInSubFrames: true,
                 preload: path.join(__dirname, "preload.js"),
               },
@@ -371,9 +372,10 @@ const createWindow = (port) => {
     webPreferences: {
       webSecurity: false,
       nativeWindowOpen: true,
-      contextIsolation: false,
+      contextIsolation: true,
       nodeIntegrationInSubFrames: true,
       preload: path.join(__dirname, "preload.js"),
+      sandbox: false,
     },
   });
   //  enable_cors(mainWindow)
@@ -382,7 +384,8 @@ const createWindow = (port) => {
   } else {
     root_url = `http://localhost:${port}`;
   }
-  mainWindow.loadURL(root_url);
+  mainWindow.loadURL('http://localhost:8000');
+  mainWindow.webContents.openDevTools({ mode: 'right' })
   //  mainWindow.maximize();
   mainWindowState.manage(mainWindow);
 };
@@ -405,9 +408,10 @@ const loadNewWindow = (url, port) => {
     webPreferences: {
       webSecurity: false,
       nativeWindowOpen: true,
-      contextIsolation: false,
+      contextIsolation: true,
       nodeIntegrationInSubFrames: true,
       preload: path.join(__dirname, "preload.js"),
+      sandbox: false,
     },
   });
   //  enable_cors(win)
@@ -481,7 +485,7 @@ if (!gotTheLock) {
         webPreferences: {
           webSecurity: false,
           nativeWindowOpen: true,
-          contextIsolation: false,
+          contextIsolation: true,
           nodeIntegrationInSubFrames: true,
           preload: path.join(__dirname, "preload.js"),
         },
