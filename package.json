@@ -40,8 +40,7 @@
     "react": "^18.3.1",
     "electron-store": "^8.1.0",
     "electron-window-state": "^5.0.3",
-    "pinokiod": "^2.15.1",
-    "pinokiojs":"^0.0.9"
+    "pinokiod": "^2.15.1"
   },
   "devDependencies": {
     "@liangskyli/umijs-plugin-electron": "^0.4.0",

@@ -385,7 +385,7 @@ const createWindow = (port) => {
     root_url = `http://localhost:${port}`;
   }
   mainWindow.loadURL('http://localhost:8000');
-  mainWindow.webContents.openDevTools({ mode: 'right' })
+  // mainWindow.webContents.openDevTools({ mode: '' })
   //  mainWindow.maximize();
   mainWindowState.manage(mainWindow);
 };

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/consistent-type-imports */
-export {};
+export { };
 
 declare global {
   interface Window {
