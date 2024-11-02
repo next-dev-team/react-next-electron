@@ -8,19 +8,19 @@ const {
   dialog,
   clipboard,
   session,
-} = require("electron");
-const Store = require("electron-store");
-const windowStateKeeper = require("electron-window-state");
-const fs = require("fs");
-const path = require("path");
-const Pinokiod = require("pinokiod");
-const os = require("os");
-const is_mac = process.platform.startsWith("darwin");
-import packagejson from "../../package.json";
+} = require('electron');
+const Store = require('electron-store');
+const windowStateKeeper = require('electron-window-state');
+const fs = require('fs');
+const path = require('path');
+const Pinokiod = require('pinokiod');
+const os = require('os');
+const is_mac = process.platform.startsWith('darwin');
+import packagejson from '../../package.json';
 
 const platform = os.platform();
 let mainWindow;
-let root_url;
+let root_url = 'http://localhost:8000';
 let wins = {};
 let pinned = {};
 let launched;
@@ -30,18 +30,18 @@ let PORT;
 //let PORT = 42000
 //let PORT = (platform === 'linux' ? 42000 : 80)
 
-
 const filter = function (item) {
-  return item.browserName === "Chrome";
+  return item.browserName === 'Chrome';
 };
 
 const store = new Store();
 const pinokiod = new Pinokiod({
   //  port: PORT,
-  agent: "electron",
+  agent: 'electron',
   version: packagejson.version,
   store,
 });
+
 const titleBarOverlay = (colors) => {
   if (is_mac) {
     return false;
@@ -90,7 +90,7 @@ function UpsertKeyValue(obj, keyToChange, value) {
 const attach = (event, webContents) => {
   let wc = webContents;
 
-  webContents.on("will-navigate", (event, url) => {
+  webContents.on('will-navigate', (event, url) => {
     if (!webContents.opened) {
       // The first time this view is being used, set the "opened" to true, and don't do anything
       // The next time the view navigates, "the "opened" is already true, so trigger the URL open logic
@@ -98,7 +98,7 @@ const attach = (event, webContents) => {
       //  - if it's a remote host, open in external browser
       webContents.opened = true;
     } else {
-      console.log("will-navigate", { event, url });
+      console.log('will-navigate', { event, url });
       let host = new URL(url).host;
       let localhost = new URL(root_url).host;
       console.log({ host, localhost });
@@ -116,36 +116,36 @@ const attach = (event, webContents) => {
     //    console.log("responseHeaders", JSON.stringify(details.responseHeaders, null, 2))
 
     // 1. Remove X-Frame-Options
-    if (details.responseHeaders["X-Frame-Options"]) {
-      delete details.responseHeaders["X-Frame-Options"];
-    } else if (details.responseHeaders["x-frame-options"]) {
-      delete details.responseHeaders["x-frame-options"];
+    if (details.responseHeaders['X-Frame-Options']) {
+      delete details.responseHeaders['X-Frame-Options'];
+    } else if (details.responseHeaders['x-frame-options']) {
+      delete details.responseHeaders['x-frame-options'];
     }
 
     // 2. Remove Content-Security-Policy "frame-ancestors" attribute
     let csp;
     let csp_type;
-    if (details.responseHeaders["Content-Security-Policy"]) {
-      csp = details.responseHeaders["Content-Security-Policy"];
+    if (details.responseHeaders['Content-Security-Policy']) {
+      csp = details.responseHeaders['Content-Security-Policy'];
       csp_type = 0;
-    } else if (details.responseHeaders["content-security-policy"]) {
-      csp = details.responseHeaders["content-security-policy"];
+    } else if (details.responseHeaders['content-security-policy']) {
+      csp = details.responseHeaders['content-security-policy'];
       csp_type = 1;
     }
 
-    if (details.responseHeaders["cross-origin-opener-policy-report-only"]) {
-      delete details.responseHeaders["cross-origin-opener-policy-report-only"];
+    if (details.responseHeaders['cross-origin-opener-policy-report-only']) {
+      delete details.responseHeaders['cross-origin-opener-policy-report-only'];
     } else if (
-      details.responseHeaders["Cross-Origin-Opener-Policy-Report-Only"]
+      details.responseHeaders['Cross-Origin-Opener-Policy-Report-Only']
     ) {
-      delete details.responseHeaders["Cross-Origin-Opener-Policy-Report-Only"];
+      delete details.responseHeaders['Cross-Origin-Opener-Policy-Report-Only'];
     }
 
     if (csp) {
       //      console.log("CSP", csp)
       // find /frame-ancestors ;$/
       let new_csp = csp.map((c) => {
-        return c.replaceAll(/frame-ancestors[^;]+;?/gi, "");
+        return c.replaceAll(/frame-ancestors[^;]+;?/gi, '');
       });
 
       //      console.log("new_csp = ", new_csp)
@@ -154,9 +154,9 @@ const attach = (event, webContents) => {
         responseHeaders: details.responseHeaders,
       };
       if (csp_type === 0) {
-        r.responseHeaders["Content-Security-Policy"] = new_csp;
+        r.responseHeaders['Content-Security-Policy'] = new_csp;
       } else if (csp_type === 1) {
-        r.responseHeaders["content-security-policy"] = new_csp;
+        r.responseHeaders['content-security-policy'] = new_csp;
       }
       //      console.log("R", JSON.stringify(r, null, 2))
 
@@ -170,13 +170,13 @@ const attach = (event, webContents) => {
   });
 
   webContents.session.webRequest.onBeforeSendHeaders((details, callback) => {
-    let ua = details.requestHeaders["User-Agent"];
+    let ua = details.requestHeaders['User-Agent'];
     //    console.log("User Agent Before", ua)
     if (ua) {
-      ua = ua.replace(/ pinokio\/[0-9.]+/i, "");
-      ua = ua.replace(/Electron\/.+ /i, "");
+      ua = ua.replace(/ pinokio\/[0-9.]+/i, '');
+      ua = ua.replace(/Electron\/.+ /i, '');
       //      console.log("User Agent After", ua)
-      details.requestHeaders["User-Agent"] = ua;
+      details.requestHeaders['User-Agent'] = ua;
     }
 
     //    console.log("REQ", details)
@@ -229,14 +229,14 @@ const attach = (event, webContents) => {
   //    view.setAutoResize({ width: true, height: true });
   //    view.webContents.loadURL(details.url);
   //  })
-  webContents.on("did-navigate", (event, url) => {
+  webContents.on('did-navigate', (event, url) => {
     theme = pinokiod.theme;
     colors = pinokiod.colors;
     let win = webContents.getOwnerBrowserWindow();
     if (
       win &&
       win.setTitleBarOverlay &&
-      typeof win.setTitleBarOverlay === "function"
+      typeof win.setTitleBarOverlay === 'function'
     ) {
       const overlay = titleBarOverlay(colors);
       win.setTitleBarOverlay(overlay);
@@ -246,13 +246,13 @@ const attach = (event, webContents) => {
   webContents.setWindowOpenHandler((config) => {
     let url = config.url;
     let features = config.features;
-    let params = new URLSearchParams(features.split(",").join("&"));
+    let params = new URLSearchParams(features.split(',').join('&'));
     let win = wc.getOwnerBrowserWindow();
     let [width, height] = win.getSize();
     let [x, y] = win.getPosition();
 
     let origin = new URL(url).origin;
-    console.log("config", { config, root_url, origin });
+    console.log('config', { config, root_url, origin });
 
     // if the origin is the same as the pinokio host,
     // always open in new window
@@ -261,78 +261,80 @@ const attach = (event, webContents) => {
     // if features exists and it's app or self, open in pinokio
     // otherwise if it's file,
 
-    if (features === "browser") {
+    if (features === 'browser') {
       shell.openExternal(url);
-      return { action: "deny" };
+      return { action: 'deny' };
     } else if (origin === root_url) {
       return {
-        action: "allow",
+        action: 'allow',
         outlivesOpener: true,
         overrideBrowserWindowOptions: {
-          width: params.get("width") ? parseInt(params.get("width")) : width,
-          height: params.get("height")
-            ? parseInt(params.get("height"))
+          width: params.get('width') ? parseInt(params.get('width')) : width,
+          height: params.get('height')
+            ? parseInt(params.get('height'))
             : height,
           x: x + 30,
           y: y + 30,
 
           parent: null,
-          titleBarStyle: "hidden",
+          titleBarStyle: 'hidden',
           titleBarOverlay: titleBarOverlay(colors),
           webPreferences: {
+            webviewTag: true,
             webSecurity: false,
             nativeWindowOpen: true,
             contextIsolation: true,
             nodeIntegrationInSubFrames: true,
-            preload: path.join(__dirname, "preload.js"),
+            preload: path.join(__dirname, 'preload.js'),
           },
         },
       };
     } else {
       console.log({ features, url });
       if (features) {
-        if (features.startsWith("app") || features.startsWith("self")) {
+        if (features.startsWith('app') || features.startsWith('self')) {
           return {
-            action: "allow",
+            action: 'allow',
             outlivesOpener: true,
             overrideBrowserWindowOptions: {
-              width: params.get("width")
-                ? parseInt(params.get("width"))
+              width: params.get('width')
+                ? parseInt(params.get('width'))
                 : width,
-              height: params.get("height")
-                ? parseInt(params.get("height"))
+              height: params.get('height')
+                ? parseInt(params.get('height'))
                 : height,
               x: x + 30,
               y: y + 30,
 
               parent: null,
-              titleBarStyle: "hidden",
+              titleBarStyle: 'hidden',
               titleBarOverlay: titleBarOverlay(colors),
               webPreferences: {
+                webviewTag: true,
                 webSecurity: false,
                 nativeWindowOpen: true,
                 contextIsolation: true,
                 nodeIntegrationInSubFrames: true,
-                preload: path.join(__dirname, "preload.js"),
+                preload: path.join(__dirname, 'preload.js'),
               },
             },
           };
-        } else if (features.startsWith("file")) {
-          let u = features.replace("file://", "");
+        } else if (features.startsWith('file')) {
+          let u = features.replace('file://', '');
           shell.showItemInFolder(u);
-          return { action: "deny" };
+          return { action: 'deny' };
         } else {
           shell.openExternal(url);
-          return { action: "deny" };
+          return { action: 'deny' };
         }
       } else {
-        if (features.startsWith("file")) {
-          let u = features.replace("file://", "");
+        if (features.startsWith('file')) {
+          let u = features.replace('file://', '');
           shell.showItemInFolder(u);
-          return { action: "deny" };
+          return { action: 'deny' };
         } else {
           shell.openExternal(url);
-          return { action: "deny" };
+          return { action: 'deny' };
         }
       }
     }
@@ -343,9 +345,9 @@ const getWinState = (url, options) => {
   let filename;
   try {
     let pathname = new URL(url).pathname.slice(1);
-    filename = pathname.slice("/").join("-");
+    filename = pathname.slice('/').join('-');
   } catch {
-    filename = "index.json";
+    filename = 'index.json';
   }
   let state = windowStateKeeper({
     file: filename,
@@ -362,7 +364,7 @@ const createWindow = (port) => {
   });
 
   mainWindow = new BrowserWindow({
-    titleBarStyle: "hidden",
+    titleBarStyle: 'hidden',
     titleBarOverlay: titleBarOverlay(colors),
     x: mainWindowState.x,
     y: mainWindowState.y,
@@ -370,22 +372,23 @@ const createWindow = (port) => {
     height: mainWindowState.height,
     minWidth: 190,
     webPreferences: {
+      webviewTag: true,
       webSecurity: false,
       nativeWindowOpen: true,
       contextIsolation: true,
       nodeIntegrationInSubFrames: true,
-      preload: path.join(__dirname, "preload.js"),
+      preload: path.join(__dirname, 'preload.js'),
       sandbox: false,
     },
   });
   //  enable_cors(mainWindow)
-  if ("" + port === "80") {
+  if ('' + port === '80') {
     root_url = `http://localhost`;
   } else {
     root_url = `http://localhost:${port}`;
   }
   mainWindow.loadURL('http://localhost:8000');
-  // mainWindow.webContents.openDevTools({ mode: '' })
+  mainWindow.webContents.openDevTools({ mode: 'right' });
   //  mainWindow.maximize();
   mainWindowState.manage(mainWindow);
 };
@@ -398,7 +401,7 @@ const loadNewWindow = (url, port) => {
   });
 
   let win = new BrowserWindow({
-    titleBarStyle: "hidden",
+    titleBarStyle: 'hidden',
     titleBarOverlay: titleBarOverlay(colors),
     x: winState.x,
     y: winState.y,
@@ -406,11 +409,12 @@ const loadNewWindow = (url, port) => {
     height: winState.height,
     minWidth: 190,
     webPreferences: {
+      webviewTag: true,
       webSecurity: false,
       nativeWindowOpen: true,
       contextIsolation: true,
       nodeIntegrationInSubFrames: true,
-      preload: path.join(__dirname, "preload.js"),
+      preload: path.join(__dirname, 'preload.js'),
       sandbox: false,
     },
   });
@@ -422,12 +426,12 @@ const loadNewWindow = (url, port) => {
 
 if (process.defaultApp) {
   if (process.argv.length >= 2) {
-    app.setAsDefaultProtocolClient("pinokio", process.execPath, [
+    app.setAsDefaultProtocolClient('pinokio', process.execPath, [
       path.resolve(process.argv[1]),
     ]);
   }
 } else {
-  app.setAsDefaultProtocolClient("pinokio");
+  app.setAsDefaultProtocolClient('pinokio');
 }
 
 const gotTheLock = app.requestSingleInstanceLock();
@@ -436,23 +440,23 @@ if (!gotTheLock) {
   app.quit();
 } else {
   app.on(
-    "certificate-error",
+    'certificate-error',
     (event, webContents, url, error, certificate, callback) => {
       // Prevent having error
       event.preventDefault();
       // and continue
       callback(true);
-    }
+    },
   );
 
-  app.on("second-instance", (event, argv) => {
+  app.on('second-instance', (event, argv) => {
     if (mainWindow) {
       if (mainWindow.isMinimized()) mainWindow.restore();
       mainWindow.focus();
     }
     let url = argv.pop();
     //let u = new URL(url).search
-    let u = url.replace(/pinokio:[\/]+/, "");
+    let u = url.replace(/pinokio:[\/]+/, '');
     loadNewWindow(`${root_url}/pinokio/${u}`, PORT);
     //    if (BrowserWindow.getAllWindows().length === 0 || !mainWindow) createWindow(PORT)
     //    mainWindow.focus()
@@ -463,7 +467,7 @@ if (!gotTheLock) {
   app.whenReady().then(async () => {
     // PROMPT
     let promptResponse;
-    ipcMain.on("prompt", function (eventRet, arg) {
+    ipcMain.on('prompt', function (eventRet, arg) {
       promptResponse = null;
       const point = screen.getCursorScreenPoint();
       const display = screen.getDisplayNearestPoint(point);
@@ -483,14 +487,15 @@ if (!gotTheLock) {
         //        alwaysOnTop: true,
         frame: false,
         webPreferences: {
+          webviewTag: true,
           webSecurity: false,
           nativeWindowOpen: true,
           contextIsolation: true,
           nodeIntegrationInSubFrames: true,
-          preload: path.join(__dirname, "preload.js"),
+          preload: path.join(__dirname, 'preload.js'),
         },
       });
-      arg.val = arg.val || "";
+      arg.val = arg.val || '';
       const promptHtml = `<html><body><form><label for="val">${arg.title}</label>
 <input id="val" value="${arg.val}" autofocus />
 <button id='ok'>OK</button>
@@ -513,29 +518,29 @@ document.querySelector("form").addEventListener("submit", (e) => {
 </script></body></html>`;
 
       //      promptWindow.loadFile("prompt.html")
-      promptWindow.loadURL("data:text/html," + encodeURIComponent(promptHtml));
+      promptWindow.loadURL('data:text/html,' + encodeURIComponent(promptHtml));
       promptWindow.show();
-      promptWindow.on("closed", function () {
+      promptWindow.on('closed', function () {
         console.log({ promptResponse });
         debugger;
         eventRet.returnValue = promptResponse;
         promptWindow = null;
       });
     });
-    ipcMain.on("prompt-response", function (event, arg) {
-      if (arg === "") {
+    ipcMain.on('prompt-response', function (event, arg) {
+      if (arg === '') {
         arg = null;
       }
-      console.log("prompt-response", { arg });
+      console.log('prompt-response', { arg });
       promptResponse = arg;
     });
 
     await pinokiod.start({
       browser: {
         clearCache: async () => {
-          console.log("clear cache", session.defaultSession);
+          console.log('clear cache', session.defaultSession);
           await session.defaultSession.clearStorageData();
-          console.log("cleared");
+          console.log('cleared');
         },
       },
     });
@@ -544,15 +549,15 @@ document.querySelector("form").addEventListener("submit", (e) => {
     theme = pinokiod.theme;
     colors = pinokiod.colors;
 
-    app.on("web-contents-created", attach);
-    app.on("activate", function () {
+    app.on('web-contents-created', attach);
+    app.on('activate', function () {
       if (BrowserWindow.getAllWindows().length === 0) createWindow(PORT);
     });
-    app.on("window-all-closed", function () {
-      if (process.platform !== "darwin") app.quit();
+    app.on('window-all-closed', function () {
+      if (process.platform !== 'darwin') app.quit();
     });
-    app.on("browser-window-created", (event, win) => {
-      if (win.type !== "splash") {
+    app.on('browser-window-created', (event, win) => {
+      if (win.type !== 'splash') {
         if (win.setTitleBarOverlay) {
           const overlay = titleBarOverlay(colors);
           try {
@@ -563,8 +568,8 @@ document.querySelector("form").addEventListener("submit", (e) => {
         }
       }
     });
-    app.on("open-url", (event, url) => {
-      let u = url.replace(/pinokio:[\/]+/, "");
+    app.on('open-url', (event, url) => {
+      let u = url.replace(/pinokio:[\/]+/, '');
       //    let u = new URL(url).search
       //    console.log("u", u)
       loadNewWindow(`${root_url}/pinokio/${u}`, PORT);

@@ -57,7 +57,9 @@ export default defineConfig({
     exclude: [],
   },
   tailwindcss: {},
-  request: {},
+  request: {
+    dataField: 'data',
+  },
   locale: {
     title: true,
   },
@@ -68,7 +70,7 @@ export default defineConfig({
   initialState: {},
   mock: {},
   model: {},
-  chainWebpack(config, { }) {
+  chainWebpack(config, {}) {
     // when need to import outside src
     config.module.rule('ts-in-node_modules').include.clear();
     config.plugin('unplugin-auto-import').use(autoImportPlugin());

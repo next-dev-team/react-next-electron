@@ -1,4 +1,21 @@
 
+
+/*************************************************************************************
+*
+*  # SYNTAX
+*  let fs = pinokio.fs("https://github.com/cocktailpeanut/automatic1111.pinokio.git")
+*
+*  await fs.writeFile("abc.txt", "hello world")
+*
+*  fs.uri(<bin|api>, path)
+*
+*  # EXAMPLES
+*  fs.uri("api", "sfsdfs")
+*  fs.uri("api", "https://github.com/cocktailpeanut/llamacpp.pinokio.git/icon.png")
+*  fs.uri("bin", "python/bin")
+*
+*************************************************************************************/
+
 declare class FS {
   /**
    * The URL of the parent frame

@@ -1,112 +1,161 @@
-import { ProCard } from '@ant-design/pro-components';
-import { Button, notification } from 'antd';
-import Pinokio from 'pinokiojs';
+import { DragSortTable, ProCard, ProColumns } from '@ant-design/pro-components';
+import { Button, Drawer } from 'antd';
 
 const translate = (key: string) => {
   return key;
 };
 
-const { showItemInFolder } = window.$api || {};
-
 const WeView = () => {
+  const {
+    data: apiApps,
+    loading: apiAppsLoading,
+    mutate: mutateApiApps,
+  } = useModel('usePinokio');
+
+  const state = useReactive_<{
+    selectedApp: {
+      title?: string;
+      icon?: string;
+    };
+  }>({
+    selectedApp: {
+      title: '',
+      icon: '',
+    },
+  });
+
+  const handleDragSortEnd = (
+    beforeIndex: number,
+    afterIndex: number,
+    newDataSource: any,
+  ) => {
+    mutateApiApps(newDataSource);
+  };
+
+  console.log('apiApps', apiApps);
+  const columns: ProColumns[] = [
+    {
+      title: 'Title',
+      dataIndex: 'title',
+      width: 60,
+      className: 'drag-visible',
+    },
+    {
+      title: 'Icon',
+      render(_, entity) {
+        return (
+          <AImage
+            width={80}
+            src={pinokioRawFile(`${entity.title}/${entity.icon}`)}
+            fallback="https://static.vecteezy.com/system/resources/thumbnails/008/328/554/small_2x/api-icon-style-free-vector.jpg"
+          />
+        );
+      },
+      className: 'drag-visible',
+    },
+    {
+      title: 'Action',
+      width: 100,
+      valueType: 'option',
+      render: (_, entity) => [
+        <Button
+          key={'open'}
+          onClick={() => {
+            const appUrl = `~/api/${entity.title}/start.js`
+            pinokioStatus(appUrl, (isRunning) => {
+              if (isRunning) {
+                return;
+              }
+              state.selectedApp = entity;
+              pinokioRpcRun(appUrl);
+            })
+          }}
+        >
+          Start
+        </Button>,
+        <Button
+          key={'stop'}
+          danger
+          onClick={() => {
+            pinokioRpcStop(`~/api/${entity.title}/start.js`);
+          }}
+        >
+          Stop
+        </Button>,
+      ],
+      align: 'center',
+      fixed: 'right',
+    },
+  ];
+
   return (
-    <div className="">
-      <webview
-        src={'http://localhost/'}
-        style={{
-          width: '100%',
-          height: '69vh',
-          minHeight: '100%',
-          display: 'flex',
-        }}
+    <div>
+      <Drawer
+        open={!!state.selectedApp?.title}
+        width={'100%'}
+        onClose={() => (state.selectedApp = {})}
+      >
+        <webview
+          src={`http://localhost/api/automatic1111.git/start.js`}
+          style={{
+            width: '100%',
+            height: '69vh',
+            minHeight: '100%',
+            display: 'flex',
+          }}
+        />
+      </Drawer>
+      <DragSortTable
+        loading={apiAppsLoading}
+        headerTitle="APP"
+        columns={columns}
+        rowKey="title"
+        search={false}
+        pagination={false}
+        dataSource={apiApps}
+        dragSortKey="sort"
+        onDragSortEnd={handleDragSortEnd}
       />
     </div>
   );
 };
 
 export default function HomePage() {
-
-  const pinokio = new Pinokio({
-    http: 'http://localhost',
-    ws: 'ws://localhost'
-  })
-
-  const api = async () => {
-    const rpc = pinokio.rpc()
-    await rpc.run({
-      uri: '~/api/whisper-webui.git/start.js'
-    }, (packet: any) => {
-
-      console.log('packet', packet);
-      //
-      //  req := {
-      //    uri: <the pinokio file system path>
-      //  }
-      //
-      //  example uris:
-      //  1. local uri: ~/api/test/start.json
-      //  2. public uri: https://github.com/cocktailpeanut/automatic1111.pinokio.git/install.json
-      //
-
-      //
-      //  packet = {
-      //    id,
-      //    type: “stream”,
-      //    index: <current task index>,
-      //    data: <streaming data returned from the module>
-      //  }
-      //
-      //  // 2. triggered once at the end of every step
-      //  packet = {
-      //    id,
-      //    type: “result”,
-      //    index: <current task index>,
-      //    data: <final returned result from the module>
-      //  }
-      //
-      //  // 3. triggered at the end of an entire run loop
-      //  packet = {
-      //    id,
-      //    type: “event”,
-      //    data: “stop”
-      //  }
-      //
-      //  // 4. info
-      //  packet = {
-      //    id,
-      //    type: “info”,
-      //    data: data
-      //  }
-      //
-      //  // 5. error
-      //  packet = {
-      //    id,
-      //    type: “error”,
-      //    data: data
-      //  }
-      //
-
-    })
-
-  }
-
-  useEffect(() => {
-    api()
-  }, [])
-
-
   return (
     <ProCard
       title={translate('Configs')}
       extra={
-        <Button
-          onClick={async () => {
-            window.open('http://localhost');
-          }}
-        >
-          Server Settings
+        <Space>
+          <Button
+            onClick={async () => {
+              // pinokioFs('api', 'https://github.com/cocktailpeanut/llamacpp.pinokio.git')
+              //   .clone('llamacpp.pinokio.git');
+              // pinokioFs('api', '.')
+              //   .readdir('audiocraft_plus.git');
+              const pkapi = pinokioFs('api', '.');
 
-        </Button>
+              const allApps = pkapi
+                .readdir('.')
+                .then((apps) =>
+                  Promise.all(
+                    apps.map((app) =>
+                      pkapi.readdir(app).then((res) => ({ [app]: res })),
+                    ),
+                  ),
+                );
+              allApps.then((res) => console.log('apps', res));
+            }}
+          >
+            RPC 1
+          </Button>
+          <Button
+            onClick={async () => {
+              window.open('http://localhost');
+            }}
+          >
+            Server Settings
+          </Button>
+        </Space>
       }
       bordered
       headerBordered

@@ -40,7 +40,7 @@ if (window.parent === window.top) {
     setInterval(() => {
       const currUrl = document.location.href;
       //    console.log({ currUrl, prevUrl })
-      if (currUrl != prevUrl) {
+      if (currUrl !== prevUrl) {
         // URL changed
         prevUrl = currUrl;
         console.log(`URL changed to : ${currUrl}`);
@@ -89,11 +89,9 @@ const api = {
   showItemInFolder: shell.showItemInFolder,
   hello,
   // Communicate between renderer and main process
-  message: {
-    send: (payload: unknown) => ipcRenderer.send('message', payload),
-    on: (handler: (event: Electron.IpcRendererEvent, ...args: unknown[]) => void) => ipcRenderer.on('message', handler),
-    off: (handler: (event: Electron.IpcRendererEvent, ...args: unknown[]) => void) => ipcRenderer.off('message', handler),
-  },
+  ipcSend: (payload: unknown) => ipcRenderer.send('message', payload),
+  ipcOn: (handler: (event: Electron.IpcRendererEvent, ...args: unknown[]) => void) => ipcRenderer.on('message', handler),
+  ipcOff: (handler: (event: Electron.IpcRendererEvent, ...args: unknown[]) => void) => ipcRenderer.off('message', handler),
   // Call an electron api command
   api: async <T>(methodName: string, options?: unknown): Promise<T> =>
     ipcRenderer.invoke('api', methodName, options),

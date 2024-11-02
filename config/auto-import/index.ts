@@ -27,6 +27,7 @@ export const autoImportPlugin = () =>
       // './xx/**', // all nested modules
       './src/utils/**',
       './src/hooks',
+      './src/services',
       './src/constants/**',
       './src/components',
     ],
