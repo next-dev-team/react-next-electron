@@ -95,7 +95,7 @@ export const request: RequestConfig = {
               // do nothong
               break;
             case ErrorShowType.WARN_MESSAGE:
-              message.warn(errorMessage);
+              message.warning(errorMessage);
               break;
             case ErrorShowType.ERROR_MESSAGE:
               message.error(errorMessage);

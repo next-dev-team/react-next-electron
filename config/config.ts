@@ -1,6 +1,5 @@
 import { defineConfig } from '@umijs/max';
 import pkg from '../package.json';
-import { autoImportPlugin } from './auto-import';
 
 const allDeps = Object.keys({ ...pkg.dependencies, ...pkg.devDependencies });
 
@@ -44,18 +43,19 @@ export default defineConfig({
       ],
     },
   },
-  mako: false,
+  mako: {},
+  mfsu: false,
   antd: {},
   access: {},
-  mfsu: {
-    shared: {
-      react: {
-        singleton: true,
-      },
-    },
+  // mfsu: {
+  //   shared: {
+  //     react: {
+  //       singleton: true,
+  //     },
+  //   },
 
-    exclude: [],
-  },
+  //   exclude: [],
+  // },
   tailwindcss: {},
   request: {
     dataField: 'data',
@@ -70,11 +70,11 @@ export default defineConfig({
   initialState: {},
   mock: {},
   model: {},
-  chainWebpack(config, {}) {
-    // when need to import outside src
-    config.module.rule('ts-in-node_modules').include.clear();
-    config.plugin('unplugin-auto-import').use(autoImportPlugin());
+  // chainWebpack(config, {}) {
+  //   // when need to import outside src
+  //   config.module.rule('ts-in-node_modules').include.clear();
+  //   config.plugin('unplugin-auto-import').use(autoImportPlugin());
 
-    return config;
-  },
+  //   return config;
+  // },
 });

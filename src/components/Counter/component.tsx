@@ -1,3 +1,5 @@
+import { Button, Space } from "antd";
+
 export default function CounterApp(props: {
   counter: number;
   counterAsync: number;

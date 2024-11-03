@@ -1,3 +1,4 @@
+import { useRequest } from '@umijs/max';
 import { useCallback, useState } from 'react';
 
 export default function useCounter() {

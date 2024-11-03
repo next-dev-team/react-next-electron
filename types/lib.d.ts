@@ -1,20 +1,18 @@
-
-
 /*************************************************************************************
-*
-*  # SYNTAX
-*  let fs = pinokio.fs("https://github.com/cocktailpeanut/automatic1111.pinokio.git")
-*
-*  await fs.writeFile("abc.txt", "hello world")
-*
-*  fs.uri(<bin|api>, path)
-*
-*  # EXAMPLES
-*  fs.uri("api", "sfsdfs")
-*  fs.uri("api", "https://github.com/cocktailpeanut/llamacpp.pinokio.git/icon.png")
-*  fs.uri("bin", "python/bin")
-*
-*************************************************************************************/
+ *
+ *  # SYNTAX
+ *  let fs = pinokio.fs("https://github.com/cocktailpeanut/automatic1111.pinokio.git")
+ *
+ *  await fs.writeFile("abc.txt", "hello world")
+ *
+ *  fs.uri(<bin|api>, path)
+ *
+ *  # EXAMPLES
+ *  fs.uri("api", "sfsdfs")
+ *  fs.uri("api", "https://github.com/cocktailpeanut/llamacpp.pinokio.git/icon.png")
+ *  fs.uri("bin", "python/bin")
+ *
+ *************************************************************************************/
 
 declare class FS {
   /**
@@ -202,10 +200,7 @@ declare module 'pinokiojs' {
     /**
      * @param options - The options for the Pinokio instance
      */
-    constructor(options?: {
-      http?: string;
-      ws?: string;
-    });
+    constructor(options?: { http?: string; ws?: string });
 
     /**
      * Create a new FS instance
@@ -227,5 +222,4 @@ declare module 'pinokiojs' {
      */
     port(): Promise<number>;
   }
-
 }

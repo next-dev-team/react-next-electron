@@ -1,5 +1,8 @@
+import { pinokioFs, pinokioRawFile, pinokioRpcRun, pinokioRpcStop, pinokioStatus } from '@/utils';
 import { DragSortTable, ProCard, ProColumns } from '@ant-design/pro-components';
-import { Button, Drawer } from 'antd';
+import { useModel } from '@umijs/max';
+import { useReactive } from 'ahooks';
+import { Button, Drawer, Image, Space } from 'antd';
 
 const translate = (key: string) => {
   return key;
@@ -12,7 +15,7 @@ const WeView = () => {
     mutate: mutateApiApps,
   } = useModel('usePinokio');
 
-  const state = useReactive_<{
+  const state = useReactive<{
     selectedApp: {
       title?: string;
       icon?: string;
@@ -43,7 +46,7 @@ const WeView = () => {
       title: 'Icon',
       render(_, entity) {
         return (
-          <AImage
+          <Image
             width={80}
             src={pinokioRawFile(`${entity.title}/${entity.icon}`)}
             fallback="https://static.vecteezy.com/system/resources/thumbnails/008/328/554/small_2x/api-icon-style-free-vector.jpg"
