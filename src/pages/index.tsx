@@ -36,8 +36,7 @@ const WeView = () => {
   const columns: ProColumns[] = [
     {
       title: 'Title',
-      dataIndex: 'title',
-      width: 60,
+      dataIndex: 'name',
       className: 'drag-visible',
     },
     {

@@ -261,10 +261,11 @@ const attach = (event, webContents) => {
     // if features exists and it's app or self, open in pinokio
     // otherwise if it's file,
 
-    if (features === 'browser') {
-      shell.openExternal(url);
-      return { action: 'deny' };
-    } else if (origin === root_url) {
+    // if (features === 'browser') {
+    //   shell.openExternal(url);
+    //   return { action: 'deny' };
+    // } else
+    if (origin === root_url) {
       return {
         action: 'allow',
         outlivesOpener: true,
