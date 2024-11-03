@@ -81,7 +81,7 @@ export const pinokioRpcRun = (uri: string, ondata?: any) => {
   );
 };
 
-export const pinokioStatus = (uri, ondata) => {
+export const pinokioStatus = (uri, ondata?: any) => {
   return pinokioRpc
     .status({ uri })
     .then((res: any) => {

@@ -1,4 +1,11 @@
-import { pinokioFs, pinokioRawFile, pinokioRpcRun, pinokioRpcStop, pinokioStatus } from '@/utils';
+import {
+  pinokioFs,
+  pinokioRawFile,
+  pinokioRpcRun,
+  pinokioRpcStop,
+  pinokioStatus,
+  pinokioUrl,
+} from '@/utils';
 import { DragSortTable, ProCard, ProColumns } from '@ant-design/pro-components';
 import { useModel } from '@umijs/max';
 import { useReactive } from 'ahooks';
@@ -63,14 +70,14 @@ const WeView = () => {
         <Button
           key={'open'}
           onClick={() => {
-            const appUrl = `~/api/${entity.title}/start.js`
+            const appUrl = `~/api/${entity.title}/start.js`;
             pinokioStatus(appUrl, (isRunning) => {
               if (isRunning) {
                 return;
               }
               state.selectedApp = entity;
               pinokioRpcRun(appUrl);
-            })
+            });
           }}
         >
           Start
@@ -152,7 +159,11 @@ export default function HomePage() {
           </Button>
           <Button
             onClick={async () => {
-              window.open('http://localhost');
+              const width = screen.width * 0.8;
+              const height = screen.height * 0.8;
+              const left = (screen.width - width) / 2;
+              const top = (screen.height - height) / 2;
+              window.open(pinokioUrl, '_blank', `width=${width},height=${height},left=${left},top=${top}`);
             }}
           >
             Server Settings

@@ -1,4 +1,4 @@
-import { cleanTitle, pinokioFs } from '@/utils';
+import { cleanTitle, pinokioFs, pinokioStatus } from '@/utils';
 
 const pinokioFsApi = pinokioFs('api', '.');
 
@@ -10,7 +10,6 @@ export const _pinokioGetApps = () => {
 
     const appsData = results.map((app, i) => {
       const iconFile = app.find((f) => /^icon\.\w+$/.test(f));
-      // const isRunning = await status;
       return {
         name: cleanTitle(apps[i]),
         title: apps[i],
@@ -32,4 +31,10 @@ export const _pinokioGetApps = () => {
       console.error('Error in _pinokioGetApps', err);
       throw err;
     });
+};
+
+export const pinokioStatusApp = (app = []) => {
+  return app.map(
+    async (entity) => await pinokioStatus(`~/api/${entity.title}/start.js`),
+  );
 };
