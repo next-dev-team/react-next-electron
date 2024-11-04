@@ -24,19 +24,28 @@ yarn dev
 ### Example
 
 ```tsx
-// access to electron
-const { hello } = window.$api || {};
+export default function HomePage() {
+  const { clickElement, setValue } = useWebdriverio();
 
-const Page = () => {
-  // access to global react state
-  const { counter } = useModel('counter');
+  const interactWithElements = async () => {
+    await clickElement('[data-testid="my-button"]');
+    await setValue('[data-testid="my-input"]', 'Hello, WebdriverIO!');
+  };
 
-  return <Button onClick={() => hello('ElectronJS')}>Hello </Button>;
-};
+  return (
+    <ProCard title={'Configs'} bordered headerBordered>
+      <Button onClick={interactWithElements}>Test interaction</Button>
+      <button type="button" data-testid="my-button">
+        Click Me
+      </button>
+      <input data-testid="my-input" />
+    </ProCard>
+  );
+}
 ```
 
 ## Reference and Credit
 
-<https://github.com/dieharders/ai-text-server>
-<https://github.com/cba85/electron-webview>
-<https://github.com/hokein/electron-sample-apps>
+<https://github.com/goosewobbler/wdio-electron-service-example> <https://medium.com/@anna972606/write-a-test-with-javascript-appium-9db2fee47712> [<https://webdriver.io/docs/wdio-electron-service/>](https://github.com/webdriverio/appium-boilerplate)
+
+<https://github.com/dieharders/ai-text-server> <https://github.com/cba85/electron-webview> <https://github.com/hokein/electron-sample-apps>

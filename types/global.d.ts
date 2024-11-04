@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/consistent-type-imports */
-export { };
+export {};
 
 declare global {
   interface Window {
-    $api: import('./src/preload/index').$Api;
+    $api: import('../src/preload/index').$Api;
   }
 }

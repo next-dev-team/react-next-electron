@@ -1,5 +1,5 @@
-import { contextBridge, shell, ipcRenderer } from 'electron';
-// import i18nSync from './i18n-sync';
+import { contextBridge, ipcRenderer, shell } from 'electron';
+import * as wd from './wd';
 
 const apiKey = '$api';
 
@@ -14,87 +14,29 @@ const hello = (name: string) => {
  * No promises, funcs can be directly attached.
  */
 
-
-// put this preload for main-window to give it prompt()
-window.prompt = function (title, val) {
-  return ipcRenderer.sendSync('prompt', { title, val })
-}
-const sendPinokio = (action) => {
-  console.log("window.parent == window.top?", window.parent === window.top, action, location.href)
-  if (window.parent === window.top) {
-    window.parent.postMessage({
-      action
-    }, "*")
-  }
-}
-
-
-// ONLY WHEN IN CHILD FRAME
-if (window.parent === window.top) {
-  if (window.location !== window.parent.location) {
-    let prevUrl = document.location.href
-    sendPinokio({
-      type: "location",
-      url: prevUrl
-    })
-    setInterval(() => {
-      const currUrl = document.location.href;
-      //    console.log({ currUrl, prevUrl })
-      if (currUrl !== prevUrl) {
-        // URL changed
-        prevUrl = currUrl;
-        console.log(`URL changed to : ${currUrl}`);
-        sendPinokio({
-          type: "location",
-          url: currUrl
-        })
-      }
-    }, 100);
-    window.addEventListener("message", (event) => {
-      if (event.data) {
-        console.log("event.data = ", event.data)
-        console.log("location.href = ", location.href)
-        if (event.data.action === "back") {
-          history.back()
-        } else if (event.data.action === "forward") {
-          history.forward()
-        } else if (event.data.action === "refresh") {
-          location.reload()
-        }
-      }
-    })
-  }
-}
-
-
-//document.addEventListener("DOMContentLoaded", (e) => {
-//  if (window.parent === window.top) {
-//    window.parent.postMessage({
-//      action: {
-//        type: "title",
-//        text: document.title
-//      }
-//    }, "*")
-//  }
-//})
-window.electronAPI = {
-  send: (type, msg) => {
-    ipcRenderer.send(type, msg)
-  }
-}
+const modules = {
+  ...wd,
+};
 
 const api = {
+  ...modules,
   versions: process.versions,
   // i18nSync,
   showItemInFolder: shell.showItemInFolder,
   hello,
   // Communicate between renderer and main process
   ipcSend: (payload: unknown) => ipcRenderer.send('message', payload),
-  ipcOn: (handler: (event: Electron.IpcRendererEvent, ...args: unknown[]) => void) => ipcRenderer.on('message', handler),
-  ipcOff: (handler: (event: Electron.IpcRendererEvent, ...args: unknown[]) => void) => ipcRenderer.off('message', handler),
+  ipcOn: (
+    handler: (event: Electron.IpcRendererEvent, ...args: unknown[]) => void,
+  ) => ipcRenderer.on('message', handler),
+  ipcOff: (
+    handler: (event: Electron.IpcRendererEvent, ...args: unknown[]) => void,
+  ) => ipcRenderer.off('message', handler),
   // Call an electron api command
-  api: async <T>(methodName: string, options?: unknown): Promise<T> =>
-    ipcRenderer.invoke('api', methodName, options),
+  ipcInvoke: async <T>(methodName: string, options?: unknown): Promise<T> =>
+    ipcRenderer.invoke('invoke', methodName, options),
+  openDialog: (method: any, config: any) =>
+    ipcRenderer.send('dialog', method, config),
 };
 
 contextBridge.exposeInMainWorld(apiKey, api);
