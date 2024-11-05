@@ -34,7 +34,7 @@
   },
   "dependencies": {
     "@ant-design/pro-components": "^2.7.19",
-    "@umijs/max": "^4.3.28",
+    "@umijs/max": "^4.3.30",
     "ahooks": "^3.8.1",
     "antd": "^5.21.4",
     "react": "^18.3.1",

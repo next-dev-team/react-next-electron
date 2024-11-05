@@ -5,11 +5,13 @@ import {
   pinokioRpcStop,
   pinokioStatus,
   pinokioUrl,
+  sleep,
 } from '@/utils';
 import { DragSortTable, ProCard, ProColumns } from '@ant-design/pro-components';
 import { useModel } from '@umijs/max';
 import { useReactive } from 'ahooks';
 import { Button, Drawer, Image, Space } from 'antd';
+import { useEffect } from 'react';
 
 const translate = (key: string) => {
   return key;
@@ -130,6 +132,35 @@ const WeView = () => {
 };
 
 export default function HomePage() {
+
+  const handleCheckIsApiRunning = async (isExist) => {
+    const apiApp = `~/api/next-api.git/start.js`;
+    const apiInstallApp = `~/api/next-api.git/install.js`;
+
+    // check exist
+    if (!isExist) {
+      console.log('please download api first');
+      return
+    }
+
+    // start running
+    // pinokioStatus(apiApp, async (isRunning) => {
+    //   if (!isRunning) {
+    //     console.log('API not running', isRunning)
+    //     await sleep(2000);
+    //     console.log('API is installing')
+    //     pinokioRpcRun(apiInstallApp);
+    //     return;
+    //   }
+    // });
+  }
+
+  useEffect(() => {
+    (async ()=>{
+     await pinokioFs('api', '.').exists('next-api.git').then(handleCheckIsApiRunning);
+    })()
+  }, []);
+
   return (
     <ProCard
       title={translate('Configs')}

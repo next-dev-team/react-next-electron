@@ -87,10 +87,12 @@ export const pinokioStatus = (uri, ondata?: any) => {
     .then((res: any) => {
       console.log('res', res);
       ondata?.(res);
+      return res;
     })
     .catch((err) => {
       console.log('err', err);
       ondata?.(false, err);
+      return err;
     });
 };
 
