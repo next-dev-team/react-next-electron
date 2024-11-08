@@ -17,5 +17,5 @@ module.exports = {
         html: `Click the 'start ${APP_NAME}' tab to get started!`,
       },
     },
-  ],
+  ]
 };
