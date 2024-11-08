@@ -1,3 +1,3 @@
-async def tts_engine() -> str:
+def tts_engine():
     print("Test")
     return "ping success"

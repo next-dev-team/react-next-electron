@@ -1,7 +1,7 @@
 import CounterApp from '@/components/Counter/component';
 import { counterStore } from '@/models/counter';
 import { ProCard } from '@ant-design/pro-components';
-import { useModel, useSnapshot, useRequest } from '@umijs/max';
+import { useModel, useSnapshot, useRequest, request } from '@umijs/max';
 import { Button, Flex, Space } from 'antd';
 import { useEffect } from 'react';
 
@@ -34,8 +34,15 @@ const CounterValitio = () => {
   );
 };
 
+const testPingApi = async () => {
+  const res = await request('http://localhost:8901/ping');
+  return {
+    data: res
+  };
+}
+
 const PythonTest = () => {
-  const { data, loading, mutate, refresh } = useRequest('http://localhost:8901/ping');
+  const { data, loading, mutate, refresh } = useRequest(testPingApi);
   return (
     <Space>
       <Button danger onClick={() => mutate({})}>Reset</Button>
