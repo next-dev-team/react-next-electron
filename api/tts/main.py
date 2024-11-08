@@ -25,7 +25,7 @@ class Ping(BaseModel):
 
 
 @app.get("/ping")
-def ping(data: Ping):
+def ping():
     logger.warning("ping")
 
     try:
