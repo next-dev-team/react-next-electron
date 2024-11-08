@@ -3,7 +3,7 @@ from pydantic import BaseModel, Field
 import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
 from loguru import logger
-from api.tts.modules.tts import tts_engine
+from tts.modules.tts import tts_engine
 
 
 app = FastAPI()
