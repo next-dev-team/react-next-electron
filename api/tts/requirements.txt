@@ -1,0 +1,6 @@
+fastapi==0.111.0
+uvicorn==0.29.0
+sympy==1.12
+edge_tts
+pydantic
+loguru
