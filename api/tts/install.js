@@ -3,18 +3,7 @@ const ENV_PATH = "env";
 
 module.exports = {
   run: [
-    // Delete this step if your project does not use torch
-    {
-      method: "script.start",
-      params: {
-        uri: "torch.js",
-        params: {
-          venv: ENV_PATH,
-          path: APP_NAME,
-          // xformers: true   // uncomment this line if your project requires xformers
-        },
-      },
-    },
+
     {
       method: "shell.run",
       params: {
