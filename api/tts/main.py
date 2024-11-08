@@ -24,7 +24,7 @@ class Ping(BaseModel):
     text: str = Field(..., description="File path to the audio file")
 
 
-@app.post("/ping")
+@app.get("/ping")
 def ping(data: Ping):
     logger.warning("ping")
 

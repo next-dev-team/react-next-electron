@@ -35,7 +35,7 @@ const CounterValitio = () => {
 };
 
 const PythonTest = () => {
-  const { data, loading, mutate, refresh } = useRequest('/api/ping');
+  const { data, loading, mutate, refresh } = useRequest('http://localhost:8901/ping');
   return (
     <Space>
       <Button danger onClick={() => mutate({})}>Reset</Button>
@@ -48,7 +48,7 @@ const PythonTest = () => {
 const TestPage = () => {
   return (
     <Flex gap={10}>
-      <ProCard bordered headerBordered title={'Test Fast API'}>
+      <ProCard bordered headerBordered title={'Test Pinokio API'}>
         <PythonTest />
       </ProCard>
       <ProCard bordered headerBordered title={'Counter with useModel'}>

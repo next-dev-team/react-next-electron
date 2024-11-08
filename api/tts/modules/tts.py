@@ -1,2 +1,3 @@
-async def tts_engine() -> dict:
-    return print("Test")
+async def tts_engine() -> str:
+    print("Test")
+    return "ping success"
