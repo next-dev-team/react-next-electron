@@ -4,3 +4,4 @@ sympy==1.12
 edge_tts
 pydantic
 loguru
+Jinja2
