@@ -1,15 +1,19 @@
-
-
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
 from loguru import logger
-
 from modules.tts import tts_engine
 
+from fastapi.templating import Jinja2Templates
 
-app =  FastAPI(swagger_ui_parameters={})
+
+app = FastAPI(swagger_ui_parameters={})
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+templates = Jinja2Templates(directory="templates", autoescape=False, auto_reload=True)
 
 origins = ["*"]
 
@@ -36,9 +40,12 @@ def ping():
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.get("/")
-def read_root():
- return {"Hello": "World"}
+
+@app.get("/", response_class=HTMLResponse)
+async def read_root(request: Request, id: str = 8901):
+    return templates.TemplateResponse(
+        request=request, name="index.html", context={"id": id}
+    )
 
 
 if __name__ == "__main__":
