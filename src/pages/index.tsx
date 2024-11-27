@@ -156,8 +156,8 @@ export default function HomePage() {
   }
 
   useEffect(() => {
-    (async ()=>{
-     await pinokioFs('api', '.').exists('next-api.git').then(handleCheckIsApiRunning);
+    (async () => {
+      await pinokioFs('api', '.').exists('next-api.git').then(handleCheckIsApiRunning);
     })()
   }, []);
 

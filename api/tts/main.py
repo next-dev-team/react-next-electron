@@ -1,17 +1,23 @@
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
 from loguru import logger
-from modules.tts import tts_engine
+from modules.tts import srt_edge_tts
+import os
 
 from fastapi.templating import Jinja2Templates
 
 
 app = FastAPI(swagger_ui_parameters={})
-app.mount("/static", StaticFiles(directory="static"), name="static")
+
+static_dir = "static"
+if not os.path.isdir(static_dir):
+    os.makedirs(static_dir)
+
+app.mount("/static", StaticFiles(directory=static_dir), name="static")
 
 templates = Jinja2Templates(directory="templates", autoescape=False, auto_reload=True)
 
@@ -31,14 +37,14 @@ class Ping(BaseModel):
 
 
 @app.get("/ping")
-def ping():
+async def ping():
     logger.warning("ping")
-
     try:
-        result = tts_engine()
+        result = await srt_edge_tts(path="data/test1.srt", voice="km-KH-PisethNeural")
         return {"text": result}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        logger.error(f"Error generating audio: {e}")
+        return {"text": "Error generating audio"}
 
 
 @app.get("/", response_class=HTMLResponse)
