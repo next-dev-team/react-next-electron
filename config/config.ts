@@ -44,18 +44,10 @@ export default defineConfig({
     },
   },
   mako: {},
+  fastRefresh: true,
   mfsu: false,
   antd: {},
   access: {},
-  // mfsu: {
-  //   shared: {
-  //     react: {
-  //       singleton: true,
-  //     },
-  //   },
-
-  //   exclude: [],
-  // },
   tailwindcss: {},
   request: {
     dataField: 'data',
@@ -63,18 +55,8 @@ export default defineConfig({
   locale: {
     title: true,
   },
-  // dva: {
-  //   immer: {},
-  // },
   valtio: {},
   initialState: {},
   mock: {},
   model: {},
-  // chainWebpack(config, {}) {
-  //   // when need to import outside src
-  //   config.module.rule('ts-in-node_modules').include.clear();
-  //   config.plugin('unplugin-auto-import').use(autoImportPlugin());
-
-  //   return config;
-  // },
 });

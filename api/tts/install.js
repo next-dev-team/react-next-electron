@@ -3,13 +3,12 @@ const ENV_PATH = "env";
 
 module.exports = {
   run: [
-
     {
       method: "shell.run",
       params: {
         venv: ENV_PATH, // Edit this to customize the venv folder path
         path: APP_NAME,
-        message: ["pip install devicetorch", "pip install -r requirements.txt"],
+        message: ["pip install -r requirements.txt"],
       },
     },
     {
