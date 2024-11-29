@@ -6332,10 +6332,10 @@ electron-window-state@^5.0.3:
     jsonfile "^4.0.0"
     mkdirp "^0.5.1"
 
-electron@^33.0.0:
-  version "33.0.0"
-  resolved "https://registry.yarnpkg.com/electron/-/electron-33.0.0.tgz#02879c3bbcc5e743492c253949f1a833fa744476"
-  integrity sha512-OdLLR/zAVuNfKahSSYokZmSi7uK2wEYTbCoiIdqWLsOWmCqO9j0JC2XkYQmXQcAk2BJY0ri4lxwAfc5pzPDYsA==
+electron@^33.2.1:
+  version "33.2.1"
+  resolved "https://registry.yarnpkg.com/electron/-/electron-33.2.1.tgz#d0d7bba7a7abf4f14881d0a6e03c498b301a2d5f"
+  integrity sha512-SG/nmSsK9Qg1p6wAW+ZfqU+AV8cmXMTIklUL18NnOKfZLlum4ZsDoVdmmmlL39ZmeCaq27dr7CgslRPahfoVJg==
   dependencies:
     "@electron/get" "^2.0.0"
     "@types/node" "^20.9.0"
@@ -11012,10 +11012,10 @@ pino@7.11.0:
     sonic-boom "^2.2.1"
     thread-stream "^0.15.1"
 
-pinokiod@^2.15.15:
-  version "2.15.15"
-  resolved "https://registry.yarnpkg.com/pinokiod/-/pinokiod-2.15.15.tgz#c5ee8537050629aba7a263c1bb7fe4ee0fa0f4eb"
-  integrity sha512-bVi/uDkz4oahl7oomP5bOsVgSQdjE8LEWtbpYV1ACCVcPJ+DUvdfFkAmq33hJRinsyuR2U2l+aTchWoX1cZUHg==
+pinokiod@^2.15.19:
+  version "2.15.19"
+  resolved "https://registry.yarnpkg.com/pinokiod/-/pinokiod-2.15.19.tgz#256205af684afd986411a30059b1bac0abd36357"
+  integrity sha512-Duzr4oAV5/RzH58lEUFYWB6/1YwOt72ote1kS/WZptkgQztruFjTOR7P7nVJIw0GWujTA0aFYUtN0Drn8kmwSw==
   dependencies:
     "7zip-min-win-asar-support" "^1.4.4"
     "@cocktailpeanut/node-pty-prebuilt-multiarch" "^0.11.16"
