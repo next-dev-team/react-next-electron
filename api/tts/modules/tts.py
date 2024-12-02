@@ -5,6 +5,8 @@ from pysubparser import parser
 from pydub import AudioSegment
 import edge_tts
 
+from rvc_python.infer import RVCInference
+
 
 def time_to_ms(time):
     return (
@@ -26,6 +28,13 @@ async def srt_edge_tts(path, voice):
         prev_subtitle = None
         prev_audio_duration_ms = 0
 
+        rvc = RVCInference(device='cuda:0', models_dir='D:\\pinokio\\api\\react-next-electron\\api\\tts\\data')
+        print("Available models:", rvc.list_models())
+        rvc.set_params(f0method="rmvpe")
+
+        model = 'me'  # Specify the model name if required
+        rvc.load_model(model)
+
         for subtitle in subtitles:
             # Create communication with the Edge TTS service
             communicate = edge_tts.Communicate(subtitle.text, voice)
@@ -35,6 +44,12 @@ async def srt_edge_tts(path, voice):
 
             # Load the audio segment
             audio_segment = AudioSegment.from_mp3(temp_file_path)
+
+            # Convert the audio segment to voice using RVC
+            result = rvc.infer_file(temp_file_path, os.path.join(tmpdirname, "temp.wav"))
+
+            # Load the audio segment after conversion
+            audio_segment = AudioSegment.from_wav(result)
 
             print(subtitle.start, subtitle.text)
 
@@ -66,17 +81,5 @@ async def srt_edge_tts(path, voice):
             audio_sum.export(out_f, format="wav")
 
         print(f"Audio file saved to {output_path}")
-        with open(output_path, "wb") as out_f:
-            audio_sum.export(out_f, format="wav")
-        print(f"Audio file saved to {output_path}")
 
         return output_path
-
-
-# def main():
-#     # Run the async function
-#     asyncio.run(srt_edge_tts())
-
-
-# if __name__ == "__main__":
-#     main()
