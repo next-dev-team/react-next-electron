@@ -37,10 +37,19 @@ class Ping(BaseModel):
 
 
 @app.get("/ping")
+
 async def ping():
     logger.warning("ping")
+    voice_models = {
+          "SPEAKER_00": "km-KH-PisethNeural",
+          "SPEAKER_01": "km-KH-SreymomNeural",
+        }
+    rvc_models = {
+          "SPEAKER_00": "me",
+          "SPEAKER_01": "rosev3",
+        }
     try:
-        result = await srt_edge_tts(path="data/test1.srt", voice="km-KH-PisethNeural")
+        result = await srt_edge_tts(path="data/test1.srt", voice="km-KH-PisethNeural", voice_models=voice_models, rvc_models=rvc_models)
         return {"text": result}
     except Exception as e:
         logger.error(f"Error generating audio: {e}")

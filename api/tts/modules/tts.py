@@ -13,7 +13,7 @@ def time_to_ms(time):
     ) * 1000 + time.microsecond / 1000
 
 
-async def srt_edge_tts(path, voice):
+async def srt_edge_tts(path, voice, voice_models=None, rvc_models=None):
     print(f"Generating audio file for {path} with Edge TTS")
 
     subtitles = parser.parse(path)
@@ -34,14 +34,6 @@ async def srt_edge_tts(path, voice):
         rvc.set_params(f0method="rmvpe")
 
         current_model = None
-        voice_models = {
-            "SPEAKER_00": "km-KH-PisethNeural",
-            "SPEAKER_01": "km-KH-SreymomNeural",
-        }
-        rvc_models = {
-            "SPEAKER_00": "me",
-            "SPEAKER_01": "rosev3",
-        }
 
         for subtitle in subtitles:
             if "|" in subtitle.text:
