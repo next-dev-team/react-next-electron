@@ -28,10 +28,16 @@ async def srt_edge_tts(path, voice, voice_models=None, rvc_models=None):
         prev_audio_duration_ms = 0
 
         rvc = RVCInference(
-            device="cuda:0",
-            models_dir="D:\\pinokio\\api\\react-next-electron\\api\\tts\\data",
+          device="cuda:0",
+          models_dir="D:\\pinokio\\api\\react-next-electron\\api\\tts\\data",
+          f0method = "rmvpe",
+          f0up_key=0,
+          index_rate=0.5,
+          filter_radius=3,
+          resample_sr=48000,
+          rms_mix_rate=1,
+          protect=0.33
         )
-        rvc.set_params(f0method="rmvpe")
 
         current_model = None
 
