@@ -4,7 +4,6 @@ import tempfile
 from pysubparser import parser
 from pydub import AudioSegment
 import edge_tts
-
 from rvc_python.infer import RVCInference
 
 
@@ -28,16 +27,37 @@ async def srt_edge_tts(path, voice):
         prev_subtitle = None
         prev_audio_duration_ms = 0
 
-        rvc = RVCInference(device='cuda:0', models_dir='D:\\pinokio\\api\\react-next-electron\\api\\tts\\data')
-        print("Available models:", rvc.list_models())
+        rvc = RVCInference(
+            device="cuda:0",
+            models_dir="D:\\pinokio\\api\\react-next-electron\\api\\tts\\data",
+        )
         rvc.set_params(f0method="rmvpe")
 
-        model = 'me'  # Specify the model name if required
-        rvc.load_model(model)
+        current_model = None
+        voice_models = {
+            "SPEAKER_00": "km-KH-PisethNeural",
+            "SPEAKER_01": "km-KH-SreymomNeural",
+        }
+        rvc_models = {
+            "SPEAKER_00": "me",
+            "SPEAKER_01": "rosev3",
+        }
 
         for subtitle in subtitles:
+            if "|" in subtitle.text:
+                speaker, text = subtitle.text.split("|", 1)
+            else:
+                speaker = None
+                text = subtitle.text
+
+            model = rvc_models.get(speaker)
+
+            if model != current_model:
+                rvc.load_model(model)
+                current_model = model
+
             # Create communication with the Edge TTS service
-            communicate = edge_tts.Communicate(subtitle.text, voice)
+            communicate = edge_tts.Communicate(text, voice_models.get(speaker, voice))
 
             # Save the audio to a temporary file
             await communicate.save(temp_file_path)
@@ -46,12 +66,14 @@ async def srt_edge_tts(path, voice):
             audio_segment = AudioSegment.from_mp3(temp_file_path)
 
             # Convert the audio segment to voice using RVC
-            result = rvc.infer_file(temp_file_path, os.path.join(tmpdirname, "temp.wav"))
+            result = rvc.infer_file(
+                temp_file_path, os.path.join(tmpdirname, "temp.wav")
+            )
 
             # Load the audio segment after conversion
             audio_segment = AudioSegment.from_wav(result)
 
-            print(subtitle.start, subtitle.text)
+            print(subtitle.start, text)
 
             # Calculate silence duration
             if prev_subtitle is None:
@@ -82,4 +104,3 @@ async def srt_edge_tts(path, voice):
 
         print(f"Audio file saved to {output_path}")
 
-        return output_path
