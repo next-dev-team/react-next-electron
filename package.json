@@ -25,7 +25,7 @@
     "test": "cross-env TS_NODE_TRANSPILE_ONLY=yes jest --passWithNoTests",
     "test:coverage": "cross-env TS_NODE_TRANSPILE_ONLY=yes jest --passWithNoTests --coverage",
     "test:watch": "cross-env TS_NODE_TRANSPILE_ONLY=yes jest --passWithNoTests --watch",
-    "up": "yarn upgrade-interactive --latest"
+    "upd": "yarn upgrade-interactive --latest"
   },
   "lint-staged": {
     "*.{ts,tsx}": "prettier --write",
@@ -46,13 +46,13 @@
     "@ant-design/pro-components": "^2.8.2",
     "@umijs/max": "^4.3.36",
     "ahooks": "^3.8.4",
-    "antd": "^5.22.3",
+    "antd": "^5.22.4",
+    "electron": "^33.2.1",
     "electron-store": "^8.1.0",
     "electron-window-state": "^5.0.3",
-    "pinokiod": "^2.15.24",
+    "pinokiod": "^2.15.49",
     "pinokiojs": "^0.0.9",
-    "react": "^18.3.1",
-    "electron": "^33.2.1"
+    "react": "^18.3.1"
   },
   "devDependencies": {
     "@liangskyli/umijs-plugin-electron": "^0.4.0",
@@ -65,7 +65,7 @@
     "@types/testing-library__jest-dom": "^5.14.5",
     "@types/wait-on": "^5.3.4",
     "cross-env": "^7",
-    "electron-builder": "^23.6.0",
+    "electron-builder": "^25.1.8",
     "eslint-plugin-valtio": "^0.7.0",
     "fs-extra": "^11.2.0",
     "glob": "7.2.3",
@@ -79,12 +79,12 @@
     "prettier-plugin-organize-imports": "^3.2.2",
     "prettier-plugin-packagejson": "^2.4.3",
     "python-shell": "^5.0.0",
-    "tailwindcss": "^3.4.15",
+    "tailwindcss": "^3.4.16",
     "tree-kill": "^1.2.2",
     "typescript": "^5",
     "wait-on": "^8.0.1",
-    "webpack": "^5.96.1",
-    "yarn-audit-fix": "^10.1.0"
+    "webpack": "^5.97.1",
+    "yarn-audit-fix": "^10.1.1"
   },
   "engines": {
     "node": ">=18",

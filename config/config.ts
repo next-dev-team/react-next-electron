@@ -43,7 +43,7 @@ export default defineConfig({
       ],
     },
   },
-  mako: {},
+  mako: { },
   fastRefresh: true,
   mfsu: false,
   antd: {},

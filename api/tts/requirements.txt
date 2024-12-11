@@ -1,5 +1,4 @@
 comtypes==1.2.0
-pydub==0.25.1
 pypiwin32==223
 pysub-parser==1.7.0
 edge_tts
@@ -15,3 +14,6 @@ edge_tts
 pydantic
 loguru
 Jinja2
+pysrt
+
+pydub==0.25.1

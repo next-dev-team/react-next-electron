@@ -31,12 +31,12 @@ module.exports = ({ appName = APP_NAME, envName = ENV_PATH }) => ({
     },
 
     //  Uncomment this step to add automatic venv deduplication (Experimental)
-    {
-      method: "fs.link",
-      params: {
-        venv: envName,
-      },
-    },
+    // {
+    //   method: "fs.link",
+    //   params: {
+    //     venv: envName,
+    //   },
+    // },
     {
       method: "notify",
       params: {
