@@ -7,7 +7,7 @@ module.exports = {
         venv: "env", // Edit this to customize the venv folder path
         env: {}, // Edit this to customize environment variables (see documentation)
         message: [
-          "python modules/tts.py", // Edit with your custom commands
+          "python modules/test1.py", // Edit with your custom commands
         ],
         on: [
           {

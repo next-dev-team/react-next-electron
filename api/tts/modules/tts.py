@@ -446,7 +446,7 @@ def main():
 
     # Convert SRT to multi-speaker audio
     try:
-        converter.convert("data/test.srt", "data/output4.mp3")
+        converter.convert("data/test1.srt", "data/output4.mp3")
         print("Conversion completed successfully!")
     except Exception as e:
         print(f"Conversion failed: {e}")
