@@ -44,13 +44,13 @@
   },
   "dependencies": {
     "@ant-design/pro-components": "^2.8.2",
-    "@umijs/max": "^4.4.1",
+    "@umijs/max": "^4.4.2",
     "ahooks": "^3.8.4",
-    "antd": "^5.22.5",
+    "antd": "^5.22.6",
     "electron": "^33.2.1",
     "electron-store": "^8.1.0",
     "electron-window-state": "^5.0.3",
-    "pinokiod": "^3.0.28",
+    "pinokiod": "^3.0.37",
     "pinokiojs": "^0.0.9",
     "react": "^18.3.1"
   },
