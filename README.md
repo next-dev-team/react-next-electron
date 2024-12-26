@@ -34,3 +34,9 @@ const Page = () => {
   return <Button onClick={() => hello('ElectronJS')}>Hello </Button>;
 };
 ```
+
+## Reference and Credit
+
+<https://github.com/dieharders/ai-text-server>
+<https://github.com/cba85/electron-webview>
+<https://github.com/hokein/electron-sample-apps>

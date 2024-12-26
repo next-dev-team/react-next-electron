@@ -1,139 +1,215 @@
 import {
-  ProCard,
-  ProForm,
-  ProFormCheckbox,
-  ProFormText,
-} from '@ant-design/pro-components';
-import { useLocalStorageState } from 'ahooks';
-import { Button, notification } from 'antd';
+  pinokioFs,
+  pinokioRawFile,
+  pinokioRpcRun,
+  pinokioRpcStop,
+  pinokioStatus,
+  pinokioUrl,
+  sleep,
+} from '@/utils';
+import { DragSortTable, ProCard, ProColumns } from '@ant-design/pro-components';
+import { useModel } from '@umijs/max';
+import { useReactive } from 'ahooks';
+import { Button, Drawer, Image, Space } from 'antd';
+import { useEffect } from 'react';
 
 const translate = (key: string) => {
   return key;
 };
 
-const { i18nSync, showItemInFolder } = window.$api || {};
+const WeView = () => {
+  const {
+    data: apiApps,
+    loading: apiAppsLoading,
+    mutate: mutateApiApps,
+  } = useModel('usePinokio');
 
-const handleSync = (opts = {} as any) => {
-  const { scanPath, ...restOpt } = opts || {};
-
-  i18nSync(scanPath, {
-    ...restOpt,
-    cb(value, error: any) {
-      if (error) {
-        notification.error({
-          message: translate('Error'),
-          description: error?.message || 'Unknown Error',
-        });
-        return;
-      }
-      notification.success({
-        message: translate('Success'),
-        description: value,
-        btn: (
-          <Button
-            type="primary"
-            onClick={() => {
-              showItemInFolder(value);
-            }}
-          >
-            {translate('Output Folder')}
-          </Button>
-        ),
-      });
+  const state = useReactive<{
+    selectedApp: {
+      title?: string;
+      icon?: string;
+    };
+  }>({
+    selectedApp: {
+      title: '',
+      icon: '',
     },
   });
-};
 
-const SyncForm = () => {
-  const [formState, setFormState] = useLocalStorageState('formState', {
-    defaultValue: {
-      i18nUrl: '',
-      isScanAll: true,
-      isForceOverwrite: true,
+  const handleDragSortEnd = (
+    beforeIndex: number,
+    afterIndex: number,
+    newDataSource: any,
+  ) => {
+    mutateApiApps(newDataSource);
+  };
+
+  console.log('apiApps', apiApps);
+  const columns: ProColumns[] = [
+    {
+      title: 'Title',
+      dataIndex: 'name',
+      className: 'drag-visible',
     },
-  });
+    {
+      title: 'Icon',
+      render(_, entity) {
+        return (
+          <Image
+            width={80}
+            src={pinokioRawFile(`${entity.title}/${entity.icon}`)}
+            fallback="https://static.vecteezy.com/system/resources/thumbnails/008/328/554/small_2x/api-icon-style-free-vector.jpg"
+          />
+        );
+      },
+      className: 'drag-visible',
+    },
+    {
+      title: 'Action',
+      width: 100,
+      valueType: 'option',
+      render: (_, entity) => [
+        <Button
+          key={'open'}
+          onClick={() => {
+            const appUrl = `~/api/${entity.title}/start.js`;
+            pinokioStatus(appUrl, (isRunning) => {
+              if (isRunning) {
+                return;
+              }
+              state.selectedApp = entity;
+              pinokioRpcRun(appUrl);
+            });
+          }}
+        >
+          Start
+        </Button>,
+        <Button
+          key={'stop'}
+          danger
+          onClick={() => {
+            pinokioRpcStop(`~/api/${entity.title}/start.js`);
+          }}
+        >
+          Stop
+        </Button>,
+      ],
+      align: 'center',
+      fixed: 'right',
+    },
+  ];
 
   return (
-    <ProForm
-      onFinish={async (values: any) => {
-        console.log('formState', values);
-
-        const nextValues = {
-          ...values,
-          isForceOverwrite: true,
-          isScanAll: true,
-        };
-
-        setFormState(nextValues);
-        handleSync(nextValues);
-      }}
-      initialValues={{
-        ...formState,
-      }}
-    >
-      <ProFormCheckbox
-        name="isForceOverwrite"
-        width={'md'}
-        label={translate('Force Overwrite')}
-        tooltip={translate('Overwrite file')}
+    <div>
+      <Drawer
+        open={!!state.selectedApp?.title}
+        width={'100%'}
+        onClose={() => (state.selectedApp = {})}
+      >
+        <webview
+          src={`http://localhost/api/automatic1111.git/start.js`}
+          style={{
+            width: '100%',
+            height: '69vh',
+            minHeight: '100%',
+            display: 'flex',
+          }}
+        />
+      </Drawer>
+      <DragSortTable
+        loading={apiAppsLoading}
+        headerTitle="APP"
+        columns={columns}
+        rowKey="title"
+        search={false}
+        pagination={false}
+        dataSource={apiApps}
+        dragSortKey="sort"
+        onDragSortEnd={handleDragSortEnd}
       />
-
-      <ProFormCheckbox
-        name="isScanAll"
-        width={'md'}
-        label={translate('Scan All')}
-        tooltip={translate(
-          'Scan all will include dynamic params or server translate',
-        )}
-      />
-
-      <ProFormText
-        name="i18nUrl"
-        rules={[
-          {
-            type: 'url',
-            message: translate('Must be valid full API URL'),
-          },
-        ]}
-        label={translate('API URL')}
-      />
-      <ProFormText
-        rules={[
-          {
-            whitespace: true,
-            message: translate('Whitespace are not allowed'),
-          },
-          {
-            required: true,
-            message: translate(
-              'Must be a absolute path eg. D:\\projects\\test\\project\\src',
-            ),
-          },
-        ]}
-        name="scanPath"
-        label={translate('Full Path')}
-      />
-    </ProForm>
+    </div>
   );
 };
 
 export default function HomePage() {
+
+  const handleCheckIsApiRunning = async (isExist) => {
+    const apiApp = `~/api/next-api.git/start.js`;
+    const apiInstallApp = `~/api/next-api.git/install.js`;
+
+    // check exist
+    if (!isExist) {
+      console.log('please download api first');
+      return
+    }
+
+    // start running
+    // pinokioStatus(apiApp, async (isRunning) => {
+    //   if (!isRunning) {
+    //     console.log('API not running', isRunning)
+    //     await sleep(2000);
+    //     console.log('API is installing')
+    //     pinokioRpcRun(apiInstallApp);
+    //     return;
+    //   }
+    // });
+  }
+
+  useEffect(() => {
+    (async () => {
+      await pinokioFs('api', '.').exists('next-api.git').then(handleCheckIsApiRunning);
+    })()
+  }, []);
+
   return (
     <ProCard
-      title={translate('I18n Management')}
+      title={translate('Configs')}
+      extra={
+        <Space>
+          <Button
+            onClick={async () => {
+              // pinokioFs('api', 'https://github.com/cocktailpeanut/llamacpp.pinokio.git')
+              //   .clone('llamacpp.pinokio.git');
+              // pinokioFs('api', '.')
+              //   .readdir('audiocraft_plus.git');
+              const pkapi = pinokioFs('api', '.');
+
+              const allApps = pkapi
+                .readdir('.')
+                .then((apps) =>
+                  Promise.all(
+                    apps.map((app) =>
+                      pkapi.readdir(app).then((res) => ({ [app]: res })),
+                    ),
+                  ),
+                );
+              allApps.then((res) => console.log('apps', res));
+            }}
+          >
+            RPC 1
+          </Button>
+          <Button
+            onClick={async () => {
+              const width = screen.width * 0.8;
+              const height = screen.height * 0.8;
+              const left = (screen.width - width) / 2;
+              const top = (screen.height - height) / 2;
+              window.open(pinokioUrl, '_blank', `width=${width},height=${height},left=${left},top=${top}`);
+            }}
+          >
+            Server Settings
+          </Button>
+        </Space>
+      }
       bordered
       headerBordered
       tabs={{
+        destroyInactiveTabPane: true,
         items: [
           {
             key: '1',
-            label: translate('I18N SYNC'),
-            children: <SyncForm />,
-          },
-          {
-            key: '2',
-            label: translate('I18N SYNC'),
-            children: <SyncForm />,
+            label: translate('SERVER'),
+            children: <WeView />,
           },
         ],
       }}

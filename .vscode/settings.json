@@ -1,4 +1,5 @@
 {
+  "python.terminal.activateEnvironment": false,
   "workbench.iconTheme": "material-icon-theme",
   "workbench.colorTheme": "One Dark Pro",
   "editor.defaultFormatter": "esbenp.prettier-vscode",
@@ -23,18 +24,29 @@
       "(?:\\b(?:const|let)\\s+)?[\\w$_]*(?:[Ss]tyles|[Cc]lasses|[Cc]lassnames|[Cc]ls|[Cc]lx|[Cc]lass|[Cc]ss)[\\w\\d]*\\s*(?:=|\\+=)\\s*['`\"]([^'\"]*)['`\"]"
     ],
     // fn
-    ["(?:tw|cn)\\(([^)]*)\\)", "(?:'|\"|`)([^\"'`]*)(?:'|\"|`)"],
+    [
+      "(?:tw|cn)\\(([^)]*)\\)",
+      "(?:'|\"|`)([^\"'`]*)(?:'|\"|`)"
+    ],
     // dom
-    ["classList.(?:add|remove)\\(([^)]*)\\)", "(?:'|\"|`)([^\"'`]*)(?:'|\"|`)"],
+    [
+      "classList.(?:add|remove)\\(([^)]*)\\)",
+      "(?:'|\"|`)([^\"'`]*)(?:'|\"|`)"
+    ],
     // data class
-    ["data-.*-class=['\"]([^'\"]*)"]
+    [
+      "data-.*-class=['\"]([^'\"]*)"
+    ]
   ],
-  "cSpell.words": ["nocheck", "umpay"],
+  "cSpell.words": [
+    "nocheck",
+    "umpay"
+  ],
   "[shellscript]": {
     "editor.defaultFormatter": "foxundermoon.shell-format"
   },
   "[typescript]": {
-    "editor.defaultFormatter": "vscode.typescript-language-features"
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[javascriptreact]": {
     "editor.defaultFormatter": "vscode.typescript-language-features"
@@ -42,10 +54,14 @@
   "[typescriptreact]": {
     "editor.defaultFormatter": "vscode.typescript-language-features"
   },
-  "i18n-ally.enabledFrameworks": ["react"],
+  "i18n-ally.enabledFrameworks": [
+    "react"
+  ],
   "i18n-ally.keystyle": "flat",
   "i18n-ally.extract.autoDetect": true,
-  "i18n-ally.localesPaths": ["packages/i18n"],
+  "i18n-ally.localesPaths": [
+    "packages/i18n"
+  ],
   "[markdown]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   }

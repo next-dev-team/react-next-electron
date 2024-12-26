@@ -1,4 +1,10 @@
 {
   "extends": "./src/.umi/tsconfig.json",
-  "exclude": ["src/main/**/*", "src/preload/**/*"]
+  "exclude": [
+    "src/main/**/*",
+    "src/preload/**/*"
+  ],
+  "compilerOptions": {
+    "noImplicitAny": false
+  }
 }
