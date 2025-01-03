@@ -75,6 +75,11 @@ module.exports = {
     return [
       {
         icon: "fa-solid fa-power-off",
+        text: "OCR Start",
+        href: "ocr/start.js",
+      },
+      {
+        icon: "fa-solid fa-power-off",
         text: "TTS Start",
         href: "tts/start.js",
       },
@@ -93,6 +98,11 @@ module.exports = {
       //   text: "Install Sample",
       //   href: "install-sample.js",
       // },
+      {
+        icon: "fa-solid fa-plug",
+        text: "OCR Install",
+        href: "ocr/install.js",
+      },
       {
         icon: "fa-solid fa-plug",
         text: "TTS Install",
