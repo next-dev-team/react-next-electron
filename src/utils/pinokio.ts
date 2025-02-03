@@ -1,8 +1,9 @@
 import Pinokio from 'pinokiojs';
+const port =42000
 
 const pinokio = new Pinokio({
-  http: 'http://localhost',
-  ws: 'ws://localhost',
+  http: `http://localhost:${port}`,
+  ws: `ws://localhost:${port}`,
 });
 
 // const URI = '~/api/whisper-webui.git/start.js';

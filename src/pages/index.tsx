@@ -5,7 +5,6 @@ import {
   pinokioRpcStop,
   pinokioStatus,
   pinokioUrl,
-  sleep,
 } from '@/utils';
 import { DragSortTable, ProCard, ProColumns } from '@ant-design/pro-components';
 import { useModel } from '@umijs/max';
@@ -132,7 +131,6 @@ const WeView = () => {
 };
 
 export default function HomePage() {
-
   const handleCheckIsApiRunning = async (isExist) => {
     const apiApp = `~/api/next-api.git/start.js`;
     const apiInstallApp = `~/api/next-api.git/install.js`;
@@ -140,7 +138,7 @@ export default function HomePage() {
     // check exist
     if (!isExist) {
       console.log('please download api first');
-      return
+      return;
     }
 
     // start running
@@ -153,12 +151,17 @@ export default function HomePage() {
     //     return;
     //   }
     // });
-  }
+  };
 
   useEffect(() => {
     (async () => {
-      await pinokioFs('api', '.').exists('next-api.git').then(handleCheckIsApiRunning);
-    })()
+      await pinokioFs('api', '.')
+        .exists('next-api.git')
+        .then(handleCheckIsApiRunning)
+        .catch((err) => {
+          console.log('not exist', err);
+        });
+    })();
   }, []);
 
   return (
@@ -194,7 +197,11 @@ export default function HomePage() {
               const height = screen.height * 0.8;
               const left = (screen.width - width) / 2;
               const top = (screen.height - height) / 2;
-              window.open(pinokioUrl, '_blank', `width=${width},height=${height},left=${left},top=${top}`);
+              window.open(
+                pinokioUrl,
+                '_blank',
+                `width=${width},height=${height},left=${left},top=${top}`,
+              );
             }}
           >
             Server Settings
