@@ -16,7 +16,7 @@ const external = [
 
 const externalDeps = external.filter((i) => allDeps.includes(i));
 
-console.log('externalDeps', externalDeps);
+// console.log('externalDeps', externalDeps);
 
 // all UMI config here
 export default defineConfig({

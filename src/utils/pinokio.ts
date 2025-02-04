@@ -14,7 +14,7 @@ export const pinokioUrl = pinokio.url.http;
 
 export const pinokioRawFile = (filepath: string, drive = 'api') => {
   const path = filepath ? `${pinokioUrl}/${drive}/${filepath}?raw=true` : '';
-  console.log('filepath', path);
+  // console.log('filepath', path);
   return path;
 };
 
@@ -29,7 +29,7 @@ export const pinokioRpcRun = (uri: string, ondata?: any) => {
       uri,
     },
     (packet: any) => {
-      console.log('packet', packet);
+      console.log('pinokioRpcRun', packet);
       ondata?.(packet);
       //
       //  req := {
@@ -86,12 +86,12 @@ export const pinokioStatus = (uri, ondata?: any) => {
   return pinokioRpc
     .status({ uri })
     .then((res: any) => {
-      console.log('res', res);
+      console.log('pinokioStatus', res);
       ondata?.(res);
       return res;
     })
     .catch((err) => {
-      console.log('err', err);
+      console.log('pinokioStatus', err);
       ondata?.(false, err);
       return err;
     });

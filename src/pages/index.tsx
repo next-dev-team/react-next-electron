@@ -72,6 +72,7 @@ const WeView = () => {
           key={'open'}
           onClick={() => {
             const appUrl = `~/api/${entity.title}/start.js`;
+            console.log("appUrl", appUrl);
             pinokioStatus(appUrl, (isRunning) => {
               if (isRunning) {
                 return;
@@ -137,7 +138,7 @@ export default function HomePage() {
 
     // check exist
     if (!isExist) {
-      console.log('please download api first');
+      // console.log('please download api first');
       return;
     }
 
