@@ -12,7 +12,8 @@ const pinokioRpc = pinokio.rpc();
 export const pinokioPort = pinokio.port();
 export const pinokioUrl = pinokio.url.http;
 
-export const pinokioRawFile = (filepath: string, drive = 'api') => {
+export const pinokioRawFile = (filepath?: string, drive = 'api') => {
+  if (!filepath) return '';
   const path = filepath ? `${pinokioUrl}/${drive}/${filepath}?raw=true` : '';
   // console.log('filepath', path);
   return path;

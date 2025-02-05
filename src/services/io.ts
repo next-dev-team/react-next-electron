@@ -1,4 +1,4 @@
-import { cleanTitle, pinokioFs, pinokioStatus } from '@/utils';
+import { cleanTitle, pinokioFs, pinokioRawFile, pinokioStatus } from '@/utils';
 
 const pinokioFsApi = pinokioFs('api', '.');
 
@@ -10,10 +10,12 @@ export const _pinokioGetApps = () => {
 
     const appsData = results.map((app, i) => {
       const iconFile = app.find((f) => /^icon\.\w+$/.test(f));
+      const icon = iconFile ? `icon.${iconFile.split('.').pop()}` : undefined
       return {
         name: cleanTitle(apps[i]),
         title: apps[i],
-        icon: iconFile ? `icon.${iconFile.split('.').pop()}` : undefined,
+        icon,
+        iconUrl: pinokioRawFile(`${apps[i]}/${icon}`),
         sub: app,
       };
     });

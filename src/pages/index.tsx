@@ -9,8 +9,9 @@ import {
 import { DragSortTable, ProCard, ProColumns } from '@ant-design/pro-components';
 import { useModel } from '@umijs/max';
 import { useReactive } from 'ahooks';
-import { Button, Drawer, Image, Space } from 'antd';
+import { Avatar, Button, Drawer, Image, Space } from 'antd';
 import { useEffect } from 'react';
+import { terminal } from '@umijs/max';
 
 const translate = (key: string) => {
   return key;
@@ -21,15 +22,18 @@ const WeView = () => {
     data: apiApps,
     loading: apiAppsLoading,
     mutate: mutateApiApps,
+    refresh: refreshApiApps,
   } = useModel('usePinokio');
 
   const state = useReactive<{
     selectedApp: {
+      startUrl?: string;
       title?: string;
       icon?: string;
     };
   }>({
     selectedApp: {
+      startUrl: '',
       title: '',
       icon: '',
     },
@@ -44,6 +48,9 @@ const WeView = () => {
   };
 
   console.log('apiApps', apiApps);
+
+  terminal.error('apiApps', apiApps);
+
   const columns: ProColumns[] = [
     {
       title: 'Title',
@@ -56,7 +63,7 @@ const WeView = () => {
         return (
           <Image
             width={80}
-            src={pinokioRawFile(`${entity.title}/${entity.icon}`)}
+            src={entity.iconUrl}
             fallback="https://static.vecteezy.com/system/resources/thumbnails/008/328/554/small_2x/api-icon-style-free-vector.jpg"
           />
         );
@@ -71,13 +78,29 @@ const WeView = () => {
         <Button
           key={'open'}
           onClick={() => {
+            const baseUrl = `${pinokioUrl}/api/${entity.title}`;
+            const appStartUrl = `${baseUrl}/start.js`;
+
             const appUrl = `~/api/${entity.title}/start.js`;
-            console.log("appUrl", appUrl);
+
+            // Gepeto
+            if (entity.title === 'gepeto.git') {
+              ;
+              state.selectedApp = {
+                ...entity,
+                startUrl: `${baseUrl}/index.html?raw=true`
+              };
+              return
+            }
+
             pinokioStatus(appUrl, (isRunning) => {
               if (isRunning) {
                 return;
               }
-              state.selectedApp = entity;
+              state.selectedApp = {
+                ...entity,
+                startUrl: appStartUrl
+              };
               pinokioRpcRun(appUrl);
             });
           }}
@@ -98,16 +121,26 @@ const WeView = () => {
       fixed: 'right',
     },
   ];
+  console.log('selectedApp', state.selectedApp);
+
+  const handleOnClose = () => {
+    state.selectedApp = {};
+    refreshApiApps();
+  }
 
   return (
     <div>
       <Drawer
         open={!!state.selectedApp?.title}
         width={'100%'}
-        onClose={() => (state.selectedApp = {})}
+        onClose={handleOnClose}
+        title={<Space>
+          <Avatar size="large" src={state.selectedApp?.iconUrl} />
+          {state.selectedApp?.name}
+        </Space>}
       >
         <webview
-          src={`http://localhost/api/automatic1111.git/start.js`}
+          src={state.selectedApp?.startUrl}
           style={{
             width: '100%',
             height: '69vh',
@@ -118,6 +151,20 @@ const WeView = () => {
       </Drawer>
       <DragSortTable
         loading={apiAppsLoading}
+        optionsRender={(p, dom) => {
+          return [<Button
+            key={'open'}
+            onClick={async () => {
+              state.selectedApp = {
+                startUrl: pinokioUrl,
+                title: 'pinokio',
+              };
+            }}
+          >
+            Server
+          </Button>, ...dom]
+        }
+        }
         headerTitle="APP"
         columns={columns}
         rowKey="title"
@@ -154,23 +201,23 @@ export default function HomePage() {
     // });
   };
 
-  useEffect(() => {
-    (async () => {
-      await pinokioFs('api', '.')
-        .exists('next-api.git')
-        .then(handleCheckIsApiRunning)
-        .catch((err) => {
-          console.log('not exist', err);
-        });
-    })();
-  }, []);
+  // useEffect(() => {
+  //   (async () => {
+  //     await pinokioFs('api', '.')
+  //       .exists('next-api.git')
+  //       .then(handleCheckIsApiRunning)
+  //       .catch((err) => {
+  //         console.log('not exist', err);
+  //       });
+  //   })();
+  // }, []);
 
   return (
     <ProCard
       title={translate('Configs')}
       extra={
         <Space>
-          <Button
+          {/* <Button
             onClick={async () => {
               // pinokioFs('api', 'https://github.com/cocktailpeanut/llamacpp.pinokio.git')
               //   .clone('llamacpp.pinokio.git');
@@ -190,8 +237,8 @@ export default function HomePage() {
               allApps.then((res) => console.log('apps', res));
             }}
           >
-            RPC 1
-          </Button>
+            RPC
+          </Button> */}
           <Button
             onClick={async () => {
               const width = screen.width * 0.8;

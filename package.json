@@ -6,7 +6,7 @@
     "audit-fix": " yarn-audit-fix --force",
     "build": "max build",
     "build:win": "max build electron --win",
-    "dev": "rm -rf ./src/.umi && yarn electron:dev",
+    "dev": "yarn electron:dev",
     "electron:build:linux": "max build electron --linux",
     "electron:build:mac": "max build electron --mac",
     "electron:dev": "max dev electron",
