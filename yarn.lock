@@ -11247,10 +11247,10 @@ pino@7.11.0:
     sonic-boom "^2.2.1"
     thread-stream "^0.15.1"
 
-pinokiod@^3.8.1:
-  version "3.8.1"
-  resolved "https://registry.yarnpkg.com/pinokiod/-/pinokiod-3.8.1.tgz#a751ab2fe21cdb50fec0e315abee4a4ae653407f"
-  integrity sha512-vAv6jlFWPalpnAsLY5DbEVLy5Ee2ottM/8B1URNnzITS3NkgkYJShjB54xY0IBwKzthKBbe4HqA4rVIbOduv2Q==
+pinokiod@^3.8.37:
+  version "3.8.37"
+  resolved "https://registry.yarnpkg.com/pinokiod/-/pinokiod-3.8.37.tgz#98515a4f8ed044f6965416f7b2b141dc704c4143"
+  integrity sha512-3+9oC66B8EIa9BwvHwV34nCGYrMAX0SYco20rMa7LG+4gPzK99DDdeinxeLTVHuq2+AtWq1EiTvX+VmzXuCSwg==
   dependencies:
     "7zip-min-win-asar-support" "^1.4.4"
     "@homebridge/node-pty-prebuilt-multiarch" "0.12.0-beta.5"
@@ -11302,6 +11302,7 @@ pinokiod@^3.8.1:
     sudo-prompt-programfiles-x86 "^9.2.10"
     symlink-dir "^5.2.1"
     systeminformation "^5.18.4"
+    tree-kill "^1.2.2"
     uuid "^9.0.0"
     wait-on "^7.2.0"
     which "^5.0.0"
